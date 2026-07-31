@@ -32,6 +32,12 @@
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "preview:render": "node ./scripts/preview-render.mjs",
+    "preview:serve": "python3 -m http.server 4175",
+    "preview:open": "open http://localhost:4175/examples/preview.html",
+    "preview:view": "node ./scripts/preview-view.mjs"
+  },
   "dependencies": {
     "handlebars": "^4.7.8"
   }

@@ -1,0 +1,82 @@
+{
+  "basics": {
+    "name": "Alex Winter",
+    "label": "Senior Software Engineer",
+    "email": "alex@example.com",
+    "phone": "+1 (555) 010-1234",
+    "url": "https://example.com",
+    "summary": "Product-focused engineer building reliable UX systems and data-heavy applications.",
+    "location": {
+      "city": "Portland",
+      "region": "OR",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "alexwinter",
+        "url": "https://github.com/alexwinter"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "alexwinter",
+        "url": "https://linkedin.com/in/alexwinter"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Northwind Labs",
+      "position": "Senior Software Engineer",
+      "startDate": "2022-01-01",
+      "endDate": "",
+      "summary": "Led UI platform modernization for monitoring and reporting products.",
+      "highlights": [
+        "Reduced page load time by 42% through route-based code splitting and cache strategy updates.",
+        "Designed shared component primitives consumed across 4 internal applications.",
+        "Introduced CI preview workflows for pull requests to improve review quality."
+      ]
+    },
+    {
+      "name": "Pinecone Systems",
+      "position": "Software Engineer",
+      "startDate": "2018-06-01",
+      "endDate": "2021-12-31",
+      "summary": "Implemented customer-facing analytics workflows and internal tooling.",
+      "highlights": [
+        "Built data visualization modules used by 2,000+ weekly active users.",
+        "Improved automated test coverage from 38% to 81% on core UI modules."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Oregon State University",
+      "area": "Computer Science",
+      "studyType": "B.S.",
+      "startDate": "2014-09-01",
+      "endDate": "2018-06-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend",
+      "keywords": ["TypeScript", "React", "CSS", "Accessibility"]
+    },
+    {
+      "name": "Platform",
+      "keywords": ["Node.js", "GitHub Actions", "CI/CD", "Observability"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Theme Token Library",
+      "description": "Reusable design token package and docs showcase for internal products.",
+      "url": "https://github.com/example/theme-token-library",
+      "highlights": [
+        "Shipped preview deployments for pull requests.",
+        "Documented component usage with sample data scenarios."
+      ]
+    }
+  ]
+}

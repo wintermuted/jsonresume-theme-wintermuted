@@ -11,7 +11,7 @@ npm install jsonresume-theme-wintermuted
 Also install the shared design-token package used by this theme:
 
 ```bash
-npm install @wintermuted/ui-theme
+npm install @wintermuted/wintermuted-ui-library
 ```
 
 For local development before publish:
@@ -26,13 +26,39 @@ npm install ../jsonresume-theme-wintermuted
 resumed render resume.json -t jsonresume-theme-wintermuted -o resume.html
 ```
 
+## Local Viewing
+
+This repository includes a sample resume payload for quickly previewing theme changes.
+
+```bash
+npm run preview:render
+npm run preview:serve
+npm run preview:open
+```
+
+`preview:render` uses the local theme renderer (`index.js`) directly, so it works in this repository without publishing or npm linking.
+
+Files:
+
+- `examples/resume.sample.json`
+- `examples/preview.html` (generated)
+
+You can also run:
+
+```bash
+npm run preview:view
+```
+
+This renders the sample and starts a local server on `http://localhost:4175/`.
+If a preview server is already running on that port, the script reuses it and opens the preview page.
+
 ## What this package contains
 
 - `resume.hbs` main Handlebars template
 - `partials/` section partials
 - `helpers/` helper functions
 - `style.css` theme-specific styles
-- Runtime CSS token inlining from `@wintermuted/ui-theme`
+- Runtime CSS token inlining from `@wintermuted/wintermuted-ui-library`
 
 ## Publish
 
