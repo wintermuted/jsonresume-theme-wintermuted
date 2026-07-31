@@ -1,0 +1,30 @@
+name: CI Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate theme module loads
+        run: node -e "import('./index.js')"
+
+      - name: Validate package contents
+        run: npm pack --dry-run
