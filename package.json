@@ -23,12 +23,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wintermuted/jsonresume-theme.git"
+    "url": "git+https://github.com/wintermuted/jsonresume-theme-wintermuted.git"
   },
   "bugs": {
-    "url": "https://github.com/wintermuted/jsonresume-theme/issues"
+    "url": "https://github.com/wintermuted/jsonresume-theme-wintermuted/issues"
   },
-  "homepage": "https://github.com/wintermuted/jsonresume-theme#readme",
+  "homepage": "https://github.com/wintermuted/jsonresume-theme-wintermuted#readme",
   "publishConfig": {
     "access": "public"
   },
