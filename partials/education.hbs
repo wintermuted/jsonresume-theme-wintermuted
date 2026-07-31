@@ -1,0 +1,28 @@
+{{#if resume.education.length}}
+<section class="section" id="education">
+  <h2>Education</h2>
+  {{#each resume.education}}
+  <div class="education-entry" id="education-{{slugify institution}}">
+    <div class="role-header">
+      <h4>
+        {{#if url}}<a href="{{ url }}">{{ institution }}</a>{{else}}{{ institution }}{{/if}}
+      </h4>
+      <span class="date">
+        {{#if startDate}}{{MY startDate}}{{/if}}
+        {{#if endDate}} &ndash; {{MY endDate}}{{/if}}
+      </span>
+    </div>
+    <p>
+      {{#if studyType}}{{ studyType }}{{#if area}}, {{/if}}{{/if}}{{#if area}}{{ area }}{{/if}}
+    </p>
+    {{#if courses.length}}
+    <ul class="keywords">
+      {{#each courses}}
+      <li>{{ this }}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </div>
+  {{/each}}
+</section>
+{{/if}}

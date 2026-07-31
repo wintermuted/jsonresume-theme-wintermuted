@@ -1,0 +1,177 @@
+{{#if resume.projects.length}}
+<section class="section" id="projects">
+  <h2>Projects</h2>
+
+  {{#with (projectsByCategory resume.projects "work") as |workProjects|}}
+  {{#if workProjects.length}}
+  <h3 class="projects-subheading">Work-Related Projects</h3>
+  {{#each workProjects}}
+  <div class="project-entry" id="project-{{slugify name}}">
+    <div class="role-header">
+      <h4>
+        {{#if url}}<a href="{{ url }}">{{ name }}</a>{{else}}{{ name }}{{/if}}
+      </h4>
+      {{#if startDate}}
+      <span class="date">
+        {{MY startDate}}
+        {{#if endDate}} &ndash; {{MY endDate}}{{/if}}
+      </span>
+      {{/if}}
+    </div>
+
+    {{#if description}}<p>{{ description }}</p>{{/if}}
+
+    {{#with (positionsForProject this @root.resume.work) as |positions|}}
+    {{#if positions.length}}
+    <div class="role-projects">
+      <span class="role-projects-label">Relevant Positions</span>
+      <ul class="role-projects-list">
+        {{#each positions}}
+        <li><a href="#{{ id }}" class="project-ref">{{ label }}</a></li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+    {{/with}}
+
+    <button class="expand-toggle" aria-label="Expand details" type="button">Show details<span class="toggle-meta">{{{projectMetaSummary this}}}</span></button>
+    <div class="detail-content">
+      {{#if images.length}}
+      <div class="project-gallery">
+        {{#each images}}
+        <figure class="project-screenshot">
+          <img src="../../{{ src }}" alt="{{ alt }}" loading="lazy" />
+          {{#if caption}}<figcaption>{{ caption }}</figcaption>{{/if}}
+        </figure>
+        {{/each}}
+        {{#each diagrams}}
+        <figure class="project-diagram">
+          <pre class="mermaid">{{ definition }}</pre>
+          {{#if title}}<figcaption>{{ title }}</figcaption>{{/if}}
+        </figure>
+        {{/each}}
+      </div>
+      {{else}}
+      {{#if diagrams.length}}
+      <div class="project-gallery">
+        {{#each diagrams}}
+        <figure class="project-diagram">
+          <pre class="mermaid">{{ definition }}</pre>
+          {{#if title}}<figcaption>{{ title }}</figcaption>{{/if}}
+        </figure>
+        {{/each}}
+      </div>
+      {{/if}}
+      {{/if}}
+
+      {{#if highlights.length}}
+      <ul class="highlights">
+        {{#each highlights}}
+        <li>{{ this }}</li>
+        {{/each}}
+      </ul>
+      {{/if}}
+
+      {{#if keywords.length}}
+      <ul class="keywords">
+        {{#each keywords}}
+        <li>{{ this }}</li>
+        {{/each}}
+      </ul>
+      {{/if}}
+    </div>
+  </div>
+  {{/each}}
+  {{/if}}
+  {{/with}}
+
+  {{#with (projectsByCategory resume.projects "open-source") as |openSourceProjects|}}
+  {{#if openSourceProjects.length}}
+  <h3 class="projects-subheading">Open Source Projects</h3>
+  {{#each openSourceProjects}}
+  <div class="project-entry" id="project-{{slugify name}}">
+    <div class="role-header">
+      <h4>
+        {{#if url}}<a href="{{ url }}">{{ name }}</a>{{else}}{{ name }}{{/if}}
+      </h4>
+      {{#if startDate}}
+      <span class="date">
+        {{MY startDate}}
+        {{#if endDate}} &ndash; {{MY endDate}}{{/if}}
+      </span>
+      {{/if}}
+    </div>
+
+    {{#if description}}<p>{{ description }}</p>{{/if}}
+
+    <button class="expand-toggle" aria-label="Expand details" type="button">Show details<span class="toggle-meta">{{{projectMetaSummary this}}}</span></button>
+    <div class="detail-content">
+      {{#if images.length}}
+      <div class="project-gallery">
+        {{#each images}}
+        <figure class="project-screenshot">
+          <img src="../../{{ src }}" alt="{{ alt }}" loading="lazy" />
+          {{#if caption}}<figcaption>{{ caption }}</figcaption>{{/if}}
+        </figure>
+        {{/each}}
+        {{#each diagrams}}
+        <figure class="project-diagram">
+          <pre class="mermaid">{{ definition }}</pre>
+          {{#if title}}<figcaption>{{ title }}</figcaption>{{/if}}
+        </figure>
+        {{/each}}
+      </div>
+      {{else}}
+      {{#if diagrams.length}}
+      <div class="project-gallery">
+        {{#each diagrams}}
+        <figure class="project-diagram">
+          <pre class="mermaid">{{ definition }}</pre>
+          {{#if title}}<figcaption>{{ title }}</figcaption>{{/if}}
+        </figure>
+        {{/each}}
+      </div>
+      {{/if}}
+      {{/if}}
+
+      {{#if highlights.length}}
+      <ul class="highlights">
+        {{#each highlights}}
+        <li>{{ this }}</li>
+        {{/each}}
+      </ul>
+      {{/if}}
+
+      {{#if keywords.length}}
+      <ul class="keywords">
+        {{#each keywords}}
+        <li>{{ this }}</li>
+        {{/each}}
+      </ul>
+      {{/if}}
+    </div>
+  </div>
+  {{/each}}
+  {{/if}}
+  {{/with}}
+</section>
+
+<!-- Lightbox overlay for project screenshots -->
+<div class="lightbox-overlay" id="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Image preview">
+  <div class="lightbox-header" id="lightbox-header">
+    <span class="lightbox-project-name" id="lightbox-project-name"></span>
+    <span class="lightbox-project-date" id="lightbox-project-date"></span>
+  </div>
+  <button class="lightbox-close" aria-label="Close preview">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous image">
+    <span class="lightbox-nav-icon lightbox-nav-icon--prev" aria-hidden="true"></span>
+  </button>
+  <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next image">
+    <span class="lightbox-nav-icon lightbox-nav-icon--next" aria-hidden="true"></span>
+  </button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+  <div class="lightbox-svg" id="lightbox-svg"></div>
+  <p class="lightbox-caption" id="lightbox-caption"></p>
+  <span class="lightbox-counter" id="lightbox-counter"></span>
+</div>
+{{/if}}

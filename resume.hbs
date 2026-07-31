@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {{#resume.basics}}
+    <title>{{ name }} &mdash; Resume</title>
+    {{/resume.basics}}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>{{{css}}}</style>
+  </head>
+  <body>
+    <div class="tile-bg" aria-hidden="true"></div>
+    <button class="gol-btn" id="gol-btn" type="button">Play the game?</button>
+
+    <div class="header-sentinel" aria-hidden="true"></div>
+    {{#resume.basics}}
+    <header class="header">
+      <div class="header-top">
+        <div class="header-name">
+          <h1>{{ name }}</h1>
+          <p class="label">{{ label }}</p>
+        </div>
+        <div class="controls">
+          <button class="print-btn" aria-label="Print resume" type="button" onclick="window.print()">&#9113; Print</button>
+          <button class="view-toggle" aria-label="Toggle view" type="button">
+            <span class="control-icon" aria-hidden="true">&#9776;</span>
+            <span class="control-label">Summary</span>
+          </button>
+          <button class="nav-pos-toggle" aria-label="Toggle nav position" type="button">Nav &#8594;</button>
+          <button class="layout-mode-toggle" aria-label="Toggle layout width" type="button">
+            <span class="control-icon" aria-hidden="true">&#x26F6;</span>
+            <span class="control-label">Full Width</span>
+          </button>
+          <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+            <span class="icon-moon">&#9790;</span>
+            <span class="icon-sun">&#9788;</span>
+          </button>
+        </div>
+      </div>
+      <div class="header-contact">
+        {{#if email}}<span><a href="mailto:{{ email }}">{{ email }}</a></span>{{/if}}
+        {{#if phone}}<span>{{ phone }}</span>{{/if}}
+        {{#if location}}<span>{{ location.city }}, {{ location.region }}</span>{{/if}}
+        {{#if url}}<span><a href="{{ url }}">{{ url }}</a></span>{{/if}}
+        {{#each profiles}}
+        <span><a href="{{ url }}">{{ network }}</a></span>
+        {{/each}}
+      </div>
+    </header>
+    {{/resume.basics}}
+
+    <div class="layout">
+      <nav class="side-nav" id="side-nav" aria-label="Section navigation"></nav>
+
+      <main>
+        {{> summary}}
+        {{> work}}
+        {{> projects}}
+        {{> skills}}
+        {{> education}}
+        {{> volunteer}}
+        {{> awards}}
+        {{> languages}}
+        {{> interests}}
+      </main>
+    </div>
+
+    {{#resume.basics}}
+    <section class="contact-section" aria-label="Contact information">
+      <h2>Contact</h2>
+      <div class="contact-links">
+        {{#if email}}<a href="mailto:{{ email }}">{{ email }}</a>{{/if}}
+        {{#each profiles}}
+        <a href="{{ url }}">{{ network }}</a>
+        {{/each}}
+      </div>
+    </section>
+    {{/resume.basics}}
+
+    <script>
+      (function () {
+        var html = document.documentElement;
+
+        /* --- Dark / Light theme --- */
+        var themeBtn = document.querySelector('.theme-toggle');
+        var storedTheme = localStorage.getItem('theme');
+        if (storedTheme) {
+          html.setAttribute('data-theme', storedTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          html.setAttribute('data-theme', 'dark');
+        }
+        themeBtn.addEventListener('click', function () {
+          var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          html.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+        });
+
+        /* --- Detailed / Summary view --- */
+        var viewBtn = document.querySelector('.view-toggle');
+        var storedView = localStorage.getItem('view');
+        html.setAttribute('data-view', storedView || 'summary');
+        function updateViewLabel() {
+          var current = html.getAttribute('data-view');
+          var nextLabel = current === 'summary' ? 'Detailed' : 'Summary';
+          var nextIcon = current === 'summary' ? '&#9638;' : '&#9776;';
+          viewBtn.innerHTML =
+            '<span class="control-icon" aria-hidden="true">' +
+            nextIcon +
+            '</span><span class="control-label">' +
+            nextLabel +
+            '</span>';
+        }
+        updateViewLabel();
+        viewBtn.addEventListener('click', function () {
+          var next = html.getAttribute('data-view') === 'summary' ? 'detailed' : 'summary';
+          html.setAttribute('data-view', next);
+          localStorage.setItem('view', next);
+          updateViewLabel();
+          // Collapse all expanded sections when switching to detailed
+          if (next === 'detailed') {
+            document.querySelectorAll('.detail-content.expanded').forEach(function (el) {
+              el.classList.remove('expanded');
+            });
+            document.querySelectorAll('.expand-toggle.expanded').forEach(function (el) {
+              el.classList.remove('expanded');
+              el.firstChild.textContent = 'Show details';
+            });
+          }
+        });
+
+        /* --- Expand / Collapse individual sections --- */
+        document.querySelectorAll('.expand-toggle').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var content = btn.nextElementSibling;
+            var isExpanded = content.classList.toggle('expanded');
+            btn.classList.toggle('expanded', isExpanded);
+            btn.firstChild.textContent = isExpanded ? 'Hide details' : 'Show details';
+
+            // Mermaid diagrams inside collapsed detail blocks render at tiny sizes
+            // if initialized while hidden. Render them when the block is expanded.
+            if (isExpanded && typeof window.renderMermaidIn === 'function') {
+              window.renderMermaidIn(content);
+            }
+          });
+        });
+
+        /* --- Nav Position Toggle --- */
+        var navPosBtn = document.querySelector('.nav-pos-toggle');
+        var storedNavPos = localStorage.getItem('nav-position');
+        if (storedNavPos) {
+          html.setAttribute('data-nav', storedNavPos);
+        }
+        function updateNavPosLabel() {
+          var current = html.getAttribute('data-nav');
+          navPosBtn.innerHTML = current === 'right' ? '&#8592; Nav' : 'Nav &#8594;';
+        }
+        updateNavPosLabel();
+        navPosBtn.addEventListener('click', function () {
+          var next = html.getAttribute('data-nav') === 'right' ? 'left' : 'right';
+          html.setAttribute('data-nav', next);
+          localStorage.setItem('nav-position', next);
+          updateNavPosLabel();
+        });
+
+        /* --- Layout Width Toggle (Focused / Full Width) --- */
+        var layoutModeBtn = document.querySelector('.layout-mode-toggle');
+        var storedLayoutMode = localStorage.getItem('layout-mode');
+        html.setAttribute('data-layout-mode', storedLayoutMode || 'full');
+        function updateLayoutModeLabel() {
+          var current = html.getAttribute('data-layout-mode');
+          var nextLabel = current === 'full' ? 'Focused' : 'Full Width';
+          var nextIcon = current === 'full' ? '&#9636;' : '&#x26F6;';
+          layoutModeBtn.innerHTML =
+            '<span class="control-icon" aria-hidden="true">' +
+            nextIcon +
+            '</span><span class="control-label">' +
+            nextLabel +
+            '</span>';
+        }
+        updateLayoutModeLabel();
+        layoutModeBtn.addEventListener('click', function () {
+          var next = html.getAttribute('data-layout-mode') === 'full' ? 'focused' : 'full';
+          html.setAttribute('data-layout-mode', next);
+          localStorage.setItem('layout-mode', next);
+          updateLayoutModeLabel();
+        });
+
+        /* --- Side Navigation --- */
+        (function () {
+          var nav = document.getElementById('side-nav');
+          var sections = document.querySelectorAll('main .section[id]');
+          if (!nav || !sections.length) return;
+
+          var EXPANDABLE_SECTION_IDS = {
+            experience: true,
+            projects: true
+          };
+
+          var sectionListItems = {};
+          var sectionLinks = {};
+          var subItemLinks = [];
+          var experienceSection = document.getElementById('experience');
+          var experienceHeading = experienceSection ? experienceSection.querySelector('h2') : null;
+          var experienceEntryCompanyById = {};
+          var projectsSection = document.getElementById('projects');
+          var projectsHeading = projectsSection ? projectsSection.querySelector('h2') : null;
+          var projectsEntrySubsectionById = {};
+
+          function setExperienceDockedCompany(label) {
+            if (!experienceHeading) return;
+
+            var normalized = (label || '').trim();
+            if (normalized) {
+              experienceHeading.setAttribute('data-subsection', normalized);
+            } else {
+              experienceHeading.removeAttribute('data-subsection');
+            }
+          }
+
+          function assignExperienceCompanyMap() {
+            if (!experienceSection) return;
+
+            var workGroups = Array.from(experienceSection.querySelectorAll('.work-group[id]'));
+            workGroups.forEach(function (group) {
+              var heading = group.querySelector('.work-company h3');
+              var companyLabel = heading ? heading.textContent.trim() : '';
+              if (!companyLabel) return;
+
+              experienceEntryCompanyById[group.id] = companyLabel;
+              Array.from(group.querySelectorAll('.work-role[id]')).forEach(function (role) {
+                experienceEntryCompanyById[role.id] = companyLabel;
+              });
+            });
+          }
+
+          function compactProjectsSubsectionLabel(rawLabel) {
+            if (!rawLabel) return '';
+            return rawLabel
+              .replace(/\s+projects$/i, '')
+              .replace(/-/g, ' ')
+              .trim();
+          }
+
+          function setProjectsDockedSubsection(label) {
+            if (!projectsHeading) return;
+
+            var normalized = (label || '').trim();
+            if (normalized) {
+              projectsHeading.setAttribute('data-subsection', normalized);
+            } else {
+              projectsHeading.removeAttribute('data-subsection');
+            }
+          }
+
+          function assignProjectsSubsectionMap() {
+            if (!projectsSection) return;
+
+            var subgroupHeadings = Array.from(projectsSection.querySelectorAll('.projects-subheading'));
+            if (!subgroupHeadings.length) return;
+
+            subgroupHeadings.forEach(function (heading) {
+              var label = compactProjectsSubsectionLabel(heading.textContent.trim()) || heading.textContent.trim();
+              var node = heading.nextElementSibling;
+
+              while (node && !(node.classList && node.classList.contains('projects-subheading'))) {
+                if (node.classList && node.classList.contains('project-entry') && node.id) {
+                  projectsEntrySubsectionById[node.id] = label;
+                }
+                node = node.nextElementSibling;
+              }
+            });
+          }
+
+          assignExperienceCompanyMap();
+          assignProjectsSubsectionMap();
+
+          function getSectionSubItems(sectionId) {
+            if (sectionId === 'experience') {
+              return Array.from(document.querySelectorAll('.work-group[id]')).map(function (entry) {
+                var heading = entry.querySelector('.work-company h3');
+                return {
+                  type: 'link',
+                  id: entry.id,
+                  label: heading ? heading.textContent.trim() : entry.id
+                };
+              });
+            }
+
+            if (sectionId === 'projects') {
+              var projectsSection = document.getElementById('projects');
+              if (!projectsSection) return [];
+
+              var subgroupHeadings = Array.from(projectsSection.querySelectorAll('.projects-subheading'));
+              if (!subgroupHeadings.length) {
+                return Array.from(projectsSection.querySelectorAll('.project-entry[id]')).map(function (entry) {
+                  var entryHeading = entry.querySelector('.role-header h4');
+                  return {
+                    type: 'link',
+                    id: entry.id,
+                    label: entryHeading ? entryHeading.textContent.trim() : entry.id
+                  };
+                });
+              }
+
+              var items = [];
+              subgroupHeadings.forEach(function (heading) {
+                var rawLabel = heading.textContent.trim();
+                var compactLabel = compactProjectsSubsectionLabel(rawLabel);
+
+                items.push({
+                  type: 'group-label',
+                  label: compactLabel || rawLabel
+                });
+
+                var node = heading.nextElementSibling;
+                while (node && !(node.classList && node.classList.contains('projects-subheading'))) {
+                  if (node.classList && node.classList.contains('project-entry') && node.id) {
+                    var entryTitle = node.querySelector('.role-header h4');
+                    items.push({
+                      type: 'link',
+                      id: node.id,
+                      label: entryTitle ? entryTitle.textContent.trim() : node.id
+                    });
+                  }
+                  node = node.nextElementSibling;
+                }
+              });
+
+              return items;
+            }
+
+            return [];
+          }
+
+          function setExpandedSection(sectionId, expanded) {
+            var li = sectionListItems[sectionId];
+            if (!li) return;
+            li.classList.toggle('is-expanded', expanded);
+          }
+
+          function setActiveSection(sectionId) {
+            Object.keys(sectionLinks).forEach(function (id) {
+              var link = sectionLinks[id];
+              link.classList.toggle('active', id === sectionId);
+
+              if (EXPANDABLE_SECTION_IDS[id]) {
+                setExpandedSection(id, id === sectionId);
+              }
+            });
+          }
+
+          function setActiveSubItem(activeId) {
+            subItemLinks.forEach(function (entry) {
+              entry.link.classList.toggle('active', entry.id === activeId);
+              if (entry.id === activeId) {
+                setExpandedSection(entry.sectionId, true);
+                setActiveSection(entry.sectionId);
+
+                if (entry.sectionId === 'projects') {
+                  setProjectsDockedSubsection(projectsEntrySubsectionById[entry.id] || '');
+                }
+
+                if (entry.sectionId === 'experience') {
+                  setExperienceDockedCompany(experienceEntryCompanyById[entry.id] || '');
+                }
+              }
+            });
+          }
+
+          // Build nav links from rendered sections
+          var ul = document.createElement('ul');
+          sections.forEach(function (section) {
+            var h2 = section.querySelector('h2');
+            if (!h2) return;
+
+            var li = document.createElement('li');
+            li.className = 'side-nav-group';
+            sectionListItems[section.id] = li;
+
+            var a = document.createElement('a');
+            a.href = '#' + section.id;
+            a.textContent = h2.textContent;
+            sectionLinks[section.id] = a;
+            a.addEventListener('click', function (e) {
+              e.preventDefault();
+              section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              history.replaceState(null, '', '#' + section.id);
+
+              setActiveSection(section.id);
+              setActiveSubItem('');
+              if (EXPANDABLE_SECTION_IDS[section.id]) {
+                setExpandedSection(section.id, true);
+              }
+            });
+            li.appendChild(a);
+
+            if (EXPANDABLE_SECTION_IDS[section.id]) {
+              var subItems = getSectionSubItems(section.id);
+              if (subItems.length) {
+                li.classList.add('has-children');
+                var subList = document.createElement('ul');
+                subList.className = 'side-nav-sublist';
+
+                subItems.forEach(function (subItem) {
+                  if (subItem.type === 'group-label') {
+                    var labelLi = document.createElement('li');
+                    labelLi.className = 'side-nav-subgroup-label';
+                    labelLi.textContent = subItem.label;
+                    subList.appendChild(labelLi);
+                    return;
+                  }
+
+                  var subLi = document.createElement('li');
+                  subLi.className = 'side-nav-subitem';
+
+                  var subLink = document.createElement('a');
+                  subLink.href = '#' + subItem.id;
+                  subLink.textContent = subItem.label;
+                  subLink.className = 'side-nav-sublink';
+
+                  subLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var target = document.getElementById(subItem.id);
+                    if (!target) return;
+
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    history.replaceState(null, '', '#' + subItem.id);
+
+                    setExpandedSection(section.id, true);
+                    setActiveSection(section.id);
+                    setActiveSubItem(subItem.id);
+                  });
+
+                  subLi.appendChild(subLink);
+                  subList.appendChild(subLi);
+
+                  subItemLinks.push({
+                    id: subItem.id,
+                    sectionId: section.id,
+                    link: subLink
+                  });
+                });
+
+                li.appendChild(subList);
+              }
+            }
+
+            ul.appendChild(li);
+          });
+          nav.appendChild(ul);
+
+          // Scroll spy: highlight active section
+          var sectionObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                setActiveSection(entry.target.id);
+                setActiveSubItem('');
+
+                if (entry.target.id !== 'projects') {
+                  setProjectsDockedSubsection('');
+                }
+
+                if (entry.target.id !== 'experience') {
+                  setExperienceDockedCompany('');
+                }
+              }
+            });
+          }, { rootMargin: '-10% 0px -80% 0px' });
+
+          sections.forEach(function (section) {
+            sectionObserver.observe(section);
+          });
+
+          // Sub-item scroll spy for Experience and Projects entries.
+          if (subItemLinks.length) {
+            var subItemObserver = new IntersectionObserver(function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  setActiveSubItem(entry.target.id);
+                }
+              });
+            }, { rootMargin: '-18% 0px -72% 0px' });
+
+            subItemLinks.forEach(function (entry) {
+              var target = document.getElementById(entry.id);
+              if (target) {
+                subItemObserver.observe(target);
+              }
+            });
+          }
+
+          // Experience role-level scroll spy to keep sticky company breadcrumb current.
+          if (experienceSection && experienceHeading) {
+            var experienceRoleObserver = new IntersectionObserver(function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  setExperienceDockedCompany(experienceEntryCompanyById[entry.target.id] || '');
+                }
+              });
+            }, { rootMargin: '-18% 0px -72% 0px' });
+
+            Array.from(experienceSection.querySelectorAll('.work-role[id]')).forEach(function (role) {
+              experienceRoleObserver.observe(role);
+            });
+          }
+
+          // Projects subgroup scroll spy for breadcrumb-style docked title.
+          if (projectsSection && projectsHeading) {
+            var projectsSubheadingObserver = new IntersectionObserver(function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  var label = compactProjectsSubsectionLabel(entry.target.textContent.trim()) || entry.target.textContent.trim();
+                  setProjectsDockedSubsection(label);
+                }
+              });
+            }, { rootMargin: '-16% 0px -78% 0px' });
+
+            Array.from(projectsSection.querySelectorAll('.projects-subheading')).forEach(function (heading) {
+              projectsSubheadingObserver.observe(heading);
+            });
+          }
+
+          // Initialize active state from URL hash when possible.
+          var hash = window.location.hash ? window.location.hash.slice(1) : '';
+          if (hash) {
+            var matchedSub = subItemLinks.find(function (entry) { return entry.id === hash; });
+            if (matchedSub) {
+              setExpandedSection(matchedSub.sectionId, true);
+              setActiveSection(matchedSub.sectionId);
+              setActiveSubItem(matchedSub.id);
+
+              if (matchedSub.sectionId === 'projects') {
+                setProjectsDockedSubsection(projectsEntrySubsectionById[matchedSub.id] || '');
+              }
+
+              if (matchedSub.sectionId === 'experience') {
+                setExperienceDockedCompany(experienceEntryCompanyById[matchedSub.id] || '');
+              }
+
+              return;
+            }
+
+            if (sectionLinks[hash]) {
+              setActiveSection(hash);
+              setActiveSubItem('');
+              if (EXPANDABLE_SECTION_IDS[hash]) {
+                setExpandedSection(hash, true);
+              }
+              return;
+            }
+          }
+
+          setActiveSection('summary');
+          setActiveSubItem('');
+          setExpandedSection('experience', false);
+          setExpandedSection('projects', false);
+          setExperienceDockedCompany('');
+          setProjectsDockedSubsection('');
+        })();
+
+        /* --- Sticky Header Height Sync --- */
+        (function () {
+          var header = document.querySelector('.header');
+          if (!header) return;
+
+          function syncStickyHeaderHeight() {
+            document.documentElement.style.setProperty(
+              '--sticky-header-h',
+              header.offsetHeight + 'px'
+            );
+          }
+
+          window.addEventListener('resize', syncStickyHeaderHeight);
+          window.addEventListener('orientationchange', syncStickyHeaderHeight);
+
+          syncStickyHeaderHeight();
+        })();
+
+        /* --- Heading Anchor Links --- */
+        (function () {
+          function addAnchor(heading, id, scrollTarget) {
+            var a = document.createElement('a');
+            a.className = 'heading-anchor';
+            a.href = '#' + id;
+            a.textContent = '#';
+            a.setAttribute('aria-label', 'Link to ' + heading.textContent.trim());
+            a.addEventListener('click', function (e) {
+              e.preventDefault();
+              history.replaceState(null, '', '#' + id);
+              scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            heading.insertBefore(a, heading.firstChild);
+          }
+
+          // h2: section headings — anchor from parent section's id
+          document.querySelectorAll('main .section[id] > h2').forEach(function (h2) {
+            addAnchor(h2, h2.parentElement.id, h2.parentElement);
+          });
+
+          // h3: company headings inside work groups
+          document.querySelectorAll('.work-group[id] h3').forEach(function (h3) {
+            var entry = h3.closest('.work-group[id]');
+            if (entry) addAnchor(h3, entry.id, entry);
+          });
+
+          // h4: all entry types with id — projects, roles, education, volunteer, awards
+          var entrySelectors = [
+            '.project-entry[id]',
+            '.work-role[id]',
+            '.education-entry[id]',
+            '.volunteer-entry[id]',
+            '.award-entry[id]'
+          ];
+          document.querySelectorAll(entrySelectors.join(',')).forEach(function (entry) {
+            var h4 = entry.querySelector('h4');
+            if (h4) addAnchor(h4, entry.id, entry);
+          });
+        })();
+      })();
+
+      /* --- Scroll-driven Tile Background --- */
+      (function () {
+        var container = document.querySelector('.tile-bg');
+        if (!container) return;
+
+        var TILE_SIZE = 14;
+        var REMOVAL_FRACTION = 0.10;
+        var tiles = [];
+        var removalOrder = [];
+        var currentlyRemoved = 0;
+        var ticking = false;
+        var gridCols = 0;
+        var gridRows = 0;
+
+        function buildGrid() {
+          gridCols = Math.ceil(window.innerWidth / TILE_SIZE);
+          gridRows = Math.ceil(window.innerHeight / TILE_SIZE);
+          var total = gridCols * gridRows;
+
+          // Clear existing
+          container.innerHTML = '';
+          tiles = [];
+          removalOrder = [];
+          currentlyRemoved = 0;
+
+          // Set grid dimensions
+          container.style.gridTemplateColumns = 'repeat(' + gridCols + ', ' + TILE_SIZE + 'px)';
+          container.style.gridTemplateRows = 'repeat(' + gridRows + ', ' + TILE_SIZE + 'px)';
+
+          // Create tiles via DocumentFragment
+          var frag = document.createDocumentFragment();
+          for (var i = 0; i < total; i++) {
+            var d = document.createElement('div');
+            d.className = 'tile';
+            frag.appendChild(d);
+            tiles.push(d);
+          }
+          container.appendChild(frag);
+
+          // Pre-compute removal order: ~10% of tiles, biased toward bottom-right
+          var candidates = [];
+          for (var idx = 0; idx < total; idx++) {
+            var row = Math.floor(idx / gridCols);
+            var col = idx % gridCols;
+            // Normalize position: 0 at top-left, 1 at bottom-right
+            var nr = gridRows > 1 ? row / (gridRows - 1) : 0;
+            var nc = gridCols > 1 ? col / (gridCols - 1) : 0;
+            // Weight = distance toward bottom-right (0..1 range, cubed for strong bias)
+            var weight = Math.pow((nr + nc) / 2, 3);
+            candidates.push({ idx: idx, weight: weight });
+          }
+
+          // Weighted random selection
+          var targetCount = Math.floor(total * REMOVAL_FRACTION);
+          var selected = [];
+          // Fisher-Yates-like weighted sampling: sort by weight * random, take top N
+          candidates.sort(function (a, b) {
+            return (b.weight * Math.random()) - (a.weight * Math.random());
+          });
+          for (var s = 0; s < Math.min(targetCount, candidates.length); s++) {
+            selected.push(candidates[s].idx);
+          }
+
+          // Shuffle selected for random removal order
+          for (var j = selected.length - 1; j > 0; j--) {
+            var k = Math.floor(Math.random() * (j + 1));
+            var tmp = selected[j];
+            selected[j] = selected[k];
+            selected[k] = tmp;
+          }
+
+          removalOrder = selected;
+        }
+
+        function onScroll() {
+          if (gameRunning) return;
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(function () {
+            var maxScroll = document.body.scrollHeight - window.innerHeight;
+            var progress = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
+            var target = Math.floor(progress * removalOrder.length);
+
+            // Add removals
+            while (currentlyRemoved < target) {
+              tiles[removalOrder[currentlyRemoved]].classList.add('removed');
+              currentlyRemoved++;
+            }
+            // Reverse removals
+            while (currentlyRemoved > target) {
+              currentlyRemoved--;
+              tiles[removalOrder[currentlyRemoved]].classList.remove('removed');
+            }
+
+            // Show/hide Game of Life button near bottom
+            var golBtn = document.getElementById('gol-btn');
+            if (golBtn && !gameRunning) {
+              golBtn.classList.toggle('visible', progress > 0.92);
+            }
+
+            ticking = false;
+          });
+        }
+
+        buildGrid();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        // Rebuild on resize (debounced)
+        var resizeTimer;
+        window.addEventListener('resize', function () {
+          if (gameRunning) return;
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function () {
+            buildGrid();
+            onScroll();
+          }, 200);
+        });
+
+        /* --- Game of Life --- */
+        var gameRunning = false;
+        var gameInterval = null;
+        var gameState = []; // flat array: true = alive
+
+        function seedFromCurrentState() {
+          // Seed: currently removed tiles become alive cells
+          var total = gridCols * gridRows;
+          gameState = new Array(total).fill(false);
+          // Use the removed tiles as initial alive pattern
+          for (var i = 0; i < removalOrder.length; i++) {
+            if (i < currentlyRemoved) {
+              gameState[removalOrder[i]] = true;
+            }
+          }
+          // Add some random cells in bottom-right to ensure enough mass
+          var minAlive = Math.floor(total * 0.05);
+          var aliveCount = gameState.filter(Boolean).length;
+          while (aliveCount < minAlive) {
+            var row = Math.floor(gridRows * 0.5 + Math.random() * gridRows * 0.5);
+            var col = Math.floor(gridCols * 0.5 + Math.random() * gridCols * 0.5);
+            if (row >= gridRows) row = gridRows - 1;
+            if (col >= gridCols) col = gridCols - 1;
+            var idx = row * gridCols + col;
+            if (!gameState[idx]) {
+              gameState[idx] = true;
+              aliveCount++;
+            }
+          }
+        }
+
+        function countNeighbors(index) {
+          var row = Math.floor(index / gridCols);
+          var col = index % gridCols;
+          var count = 0;
+          for (var dr = -1; dr <= 1; dr++) {
+            for (var dc = -1; dc <= 1; dc++) {
+              if (dr === 0 && dc === 0) continue;
+              var nr = row + dr;
+              var nc = col + dc;
+              // Wrap around edges (toroidal)
+              if (nr < 0) nr = gridRows - 1;
+              if (nr >= gridRows) nr = 0;
+              if (nc < 0) nc = gridCols - 1;
+              if (nc >= gridCols) nc = 0;
+              if (gameState[nr * gridCols + nc]) count++;
+            }
+          }
+          return count;
+        }
+
+        function nextGeneration() {
+          var total = gridCols * gridRows;
+          var next = new Array(total);
+          for (var i = 0; i < total; i++) {
+            var n = countNeighbors(i);
+            if (gameState[i]) {
+              next[i] = n === 2 || n === 3;
+            } else {
+              next[i] = n === 3;
+            }
+          }
+          gameState = next;
+        }
+
+        function renderGame() {
+          for (var i = 0; i < tiles.length; i++) {
+            tiles[i].classList.toggle('alive', !!gameState[i]);
+            tiles[i].classList.toggle('removed', !gameState[i]);
+          }
+        }
+
+        function startGame() {
+          gameRunning = true;
+          document.body.classList.add('game-active');
+          container.classList.add('game-active');
+          seedFromCurrentState();
+          renderGame();
+
+          var golBtn = document.getElementById('gol-btn');
+          golBtn.textContent = 'Stop';
+
+          gameInterval = setInterval(function () {
+            nextGeneration();
+            renderGame();
+          }, 180);
+        }
+
+        function stopGame() {
+          gameRunning = false;
+          clearInterval(gameInterval);
+          gameInterval = null;
+          document.body.classList.remove('game-active');
+          container.classList.remove('game-active');
+
+          // Reset all tiles
+          for (var i = 0; i < tiles.length; i++) {
+            tiles[i].classList.remove('alive', 'removed');
+          }
+          currentlyRemoved = 0;
+
+          var golBtn = document.getElementById('gol-btn');
+          golBtn.textContent = 'Play the game?';
+
+          // Scroll to bottom of resume and re-apply scroll state
+          window.scrollTo(0, document.body.scrollHeight);
+          onScroll();
+        }
+
+        var golBtn = document.getElementById('gol-btn');
+        if (golBtn) {
+          golBtn.addEventListener('click', function () {
+            if (gameRunning) {
+              stopGame();
+            } else {
+              startGame();
+            }
+          });
+        }
+      })();
+
+      /* --- Lightbox for project screenshots & diagrams --- */
+      (function () {
+        var overlay = document.getElementById('lightbox-overlay');
+        if (!overlay) return;
+        var img = document.getElementById('lightbox-img');
+        var svgContainer = document.getElementById('lightbox-svg');
+        var caption = document.getElementById('lightbox-caption');
+        var prevBtn = document.getElementById('lightbox-prev');
+        var nextBtn = document.getElementById('lightbox-next');
+        var counter = document.getElementById('lightbox-counter');
+        var projectName = document.getElementById('lightbox-project-name');
+        var projectDate = document.getElementById('lightbox-project-date');
+
+        function getHeadingTextWithoutAnchor(heading) {
+          if (!heading) return '';
+          var clone = heading.cloneNode(true);
+          clone.querySelectorAll('.heading-anchor').forEach(function (anchor) {
+            anchor.remove();
+          });
+          return clone.textContent.trim();
+        }
+
+        // Build ordered list of all gallery items (screenshots + diagrams)
+        var items = [];
+        var itemProjects = []; // parallel array: { name, date } per item
+        document.querySelectorAll('.project-gallery').forEach(function (gallery) {
+          var entry = gallery.closest('.project-entry');
+          var name = '';
+          var date = '';
+          if (entry) {
+            var h4 = entry.querySelector('h4');
+            if (h4) name = getHeadingTextWithoutAnchor(h4);
+            var dateEl = entry.querySelector('.role-header .date');
+            if (dateEl) date = dateEl.textContent.trim();
+          }
+          gallery.querySelectorAll('.project-screenshot, .project-diagram').forEach(function (el) {
+            items.push(el);
+            itemProjects.push({ name: name, date: date });
+          });
+        });
+
+        var currentIndex = -1;
+
+        function showItem(index) {
+          if (index < 0 || index >= items.length) return;
+          currentIndex = index;
+          var el = items[index];
+          var cap = el.querySelector('figcaption');
+          var capText = cap ? cap.textContent : '';
+
+          if (el.classList.contains('project-screenshot')) {
+            var thumb = el.querySelector('img');
+            svgContainer.style.display = 'none';
+            svgContainer.innerHTML = '';
+            img.style.display = '';
+            img.src = thumb.src;
+            img.alt = thumb.alt;
+          } else {
+            var svg = el.querySelector('.mermaid svg');
+            if (!svg) return;
+            img.style.display = 'none';
+            img.src = '';
+            svgContainer.innerHTML = '';
+            var clone = svg.cloneNode(true);
+            clone.removeAttribute('style');
+            clone.removeAttribute('width');
+            clone.removeAttribute('height');
+            svgContainer.appendChild(clone);
+            svgContainer.style.display = 'block';
+          }
+
+          caption.textContent = capText;
+          caption.style.display = capText ? 'block' : 'none';
+          var proj = itemProjects[index];
+          projectName.textContent = proj.name;
+          projectDate.textContent = proj.date;
+          counter.textContent = items.length > 1 ? (index + 1) + ' / ' + items.length : '';
+          prevBtn.disabled = index === 0;
+          nextBtn.disabled = index === items.length - 1;
+          prevBtn.style.display = items.length > 1 ? '' : 'none';
+          nextBtn.style.display = items.length > 1 ? '' : 'none';
+        }
+
+        function openLightbox(index) {
+          showItem(index);
+          overlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+
+        // Attach click handlers to each gallery item
+        items.forEach(function (el, i) {
+          el.addEventListener('click', function () {
+            openLightbox(i);
+          });
+        });
+
+        prevBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (currentIndex > 0) showItem(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (currentIndex < items.length - 1) showItem(currentIndex + 1);
+        });
+
+        overlay.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+        overlay.addEventListener('click', function (e) {
+          if (e.target === overlay) closeLightbox();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (!overlay.classList.contains('active')) return;
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowLeft' && currentIndex > 0) showItem(currentIndex - 1);
+          if (e.key === 'ArrowRight' && currentIndex < items.length - 1) showItem(currentIndex + 1);
+        });
+
+        function closeLightbox() {
+          overlay.classList.remove('active');
+          document.body.style.overflow = '';
+          img.src = '';
+          img.style.display = '';
+          svgContainer.style.display = 'none';
+          svgContainer.innerHTML = '';
+          currentIndex = -1;
+        }
+      })();
+    </script>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        sequence: { useMaxWidth: true }
+      });
+
+      window.renderMermaidIn = async function (root) {
+        var scope = root || document;
+        var nodes = Array.from(scope.querySelectorAll('.mermaid')).filter(function (el) {
+          return el.offsetParent !== null && !el.dataset.mermaidRendered;
+        });
+
+        if (!nodes.length) return;
+
+        try {
+          await mermaid.run({ nodes: nodes });
+          nodes.forEach(function (el) {
+            el.dataset.mermaidRendered = 'true';
+          });
+        } catch (err) {
+          console.error('Mermaid render error:', err);
+        }
+      };
+
+      window.renderMermaidIn(document);
+    </script>
+  </body>
+</html>

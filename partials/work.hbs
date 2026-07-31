@@ -1,0 +1,72 @@
+{{#if resume.work.length}}
+<section class="section" id="experience">
+  <h2>Experience</h2>
+
+  {{#nestedWork resume.work}}
+  {{#each this}}
+  <div class="work-group" id="company-{{slugify name}}">
+    <div class="work-company">
+      {{#if name}}
+      <h3>
+        {{#if url}}<a href="{{ url }}">{{ name }}</a>{{else}}{{ name }}{{/if}}
+      </h3>
+      {{/if}}
+      {{#if location}}<span class="location">{{ location }}</span>{{/if}}
+      {{#if description}}<p class="description">{{ description }}</p>{{/if}}
+    </div>
+
+    {{#each items}}
+    <div class="work-role" id="role-{{slugify ../name}}-{{slugify position}}-{{@index}}">
+      <div class="role-header">
+        {{#if position}}<h4>{{ position }}</h4>{{/if}}
+        <span class="date">
+          {{#if startDate}}{{MY startDate}}{{/if}}
+          &ndash;
+          {{#if endDate}}{{MY endDate}}{{else}}Present{{/if}}
+        </span>
+      </div>
+
+      {{#if _shortSummary}}<p class="role-summary role-summary--short">{{ _shortSummary }}</p>{{/if}}
+      {{#if summary}}<p class="role-summary role-summary--full">{{ summary }}</p>{{/if}}
+
+      <button class="expand-toggle" aria-label="Expand details" type="button">Show details<span class="toggle-meta">{{{roleMetaSummary ../name startDate endDate @root.resume.projects keywords}}}</span></button>
+      <div class="detail-content">
+      {{#if highlights.length}}
+      <ul class="highlights">
+        {{#each highlights}}
+        <li>{{{linkProjects this @root.resume.projects}}}</li>
+        {{/each}}
+      </ul>
+      {{/if}}
+
+      {{#projectsForRole ../name startDate endDate @root.resume.projects}}
+      <div class="role-projects">
+        <span class="role-projects-label">Key Projects</span>
+        <ul class="role-projects-list">
+          {{#each this}}
+          <li><a href="#project-{{slugify name}}" class="project-ref">{{ name }}</a></li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/projectsForRole}}
+
+      {{#if keywords.length}}
+      <div class="role-skills">
+        <span class="role-projects-label">Skills</span>
+        <ul class="keywords">
+          {{#each keywords}}
+          <li>{{ this }}</li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  {{#unless @last}}<hr class="separator" />{{/unless}}
+
+  {{/each}}
+  {{/nestedWork}}
+</section>
+{{/if}}

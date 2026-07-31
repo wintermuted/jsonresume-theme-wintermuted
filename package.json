@@ -1,0 +1,38 @@
+{
+  "name": "jsonresume-theme-wintermuted",
+  "version": "0.1.0",
+  "description": "Wintermuted JSON Resume theme extracted from the CV project.",
+  "type": "module",
+  "main": "./index.js",
+  "files": [
+    "index.js",
+    "style.css",
+    "resume.hbs",
+    "partials/**/*.hbs",
+    "helpers/**/*.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "jsonresume",
+    "jsonresume-theme",
+    "resume",
+    "theme",
+    "wintermuted"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wintermuted/jsonresume-theme.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wintermuted/jsonresume-theme/issues"
+  },
+  "homepage": "https://github.com/wintermuted/jsonresume-theme#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  }
+}
