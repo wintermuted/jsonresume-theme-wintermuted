@@ -52,6 +52,19 @@ npm run preview:view
 This renders the sample and starts a local server on `http://localhost:4175/`.
 If a preview server is already running on that port, the script reuses it and opens the preview page.
 
+## GitHub Pages Publishing
+
+This repository publishes a live preview of the sample resume through GitHub Pages using Actions.
+
+- Pushes to `main` publish production content to the root Pages site.
+- Pull requests to `main` publish isolated previews under `previews/pr-<number>/`.
+- Closing a pull request removes its preview directory from `gh-pages`.
+
+Workflows:
+
+- `.github/workflows/deploy-pages.yml`
+- `.github/workflows/cleanup-pr-preview.yml`
+
 ## What this package contains
 
 - `resume.hbs` main Handlebars template
