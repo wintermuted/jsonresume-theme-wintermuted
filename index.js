@@ -13,33 +13,45 @@ export function render(resume) {
     'utf-8'
   );
 
-  // Prepend the shared wintermuted UI theme (CSS variables + component classes).
+  // Prepend the shared wintermuted UI library (CSS variables + component classes).
   // We inline nested @import directives so the exported HTML is fully self-contained.
   let wmCss = '';
   try {
-    const wmCssUrl = import.meta.resolve('@wintermuted/ui-theme/index.css');
+    const wmCssUrl = import.meta.resolve('@wintermuted/wintermuted-ui-library/index.css');
     wmCss = inlineCssImports(new URL(wmCssUrl)) + '\n';
   } catch {
     // import.meta.resolve can fail when the theme is loaded via a file: symlink chain
     // (e.g. file:./themes/jsonresume-theme-local). Walk up the directory tree as fallback.
     let dir = import.meta.dirname;
     for (let i = 0; i < 6; i++) {
-      const candidate = path.join(dir, 'node_modules', '@wintermuted', 'ui-theme', 'index.css');
-      if (fs.existsSync(candidate)) {
-        wmCss = inlineCssImports(candidate) + '\n';
-        break;
+      const candidates = [
+        path.join(dir, 'node_modules', '@wintermuted', 'wintermuted-ui-library', 'index.css'),
+        path.join(dir, 'node_modules', '@wintermuted', 'ui-theme', 'index.css'),
+      ];
+      for (const candidate of candidates) {
+        if (fs.existsSync(candidate)) {
+          wmCss = inlineCssImports(candidate) + '\n';
+          break;
+        }
       }
+      if (wmCss) break;
       const parent = path.dirname(dir);
       if (parent === dir) break; // reached filesystem root
       dir = parent;
     }
 
     // Local sibling fallback for workspace-style checkouts:
-    // /code/jsonresume-theme-wintermuted next to /code/wintermuted-ui-theme
+    // /code/jsonresume-theme-wintermuted next to /code/wintermuted-ui-library
     if (!wmCss) {
-      const siblingCandidate = path.resolve(import.meta.dirname, '..', 'wintermuted-ui-theme', 'index.css');
-      if (fs.existsSync(siblingCandidate)) {
-        wmCss = inlineCssImports(siblingCandidate) + '\n';
+      const siblingCandidates = [
+        path.resolve(import.meta.dirname, '..', 'wintermuted-ui-library', 'index.css'),
+        path.resolve(import.meta.dirname, '..', 'wintermuted-ui-theme', 'index.css'),
+      ];
+      for (const siblingCandidate of siblingCandidates) {
+        if (fs.existsSync(siblingCandidate)) {
+          wmCss = inlineCssImports(siblingCandidate) + '\n';
+          break;
+        }
       }
     }
   }
