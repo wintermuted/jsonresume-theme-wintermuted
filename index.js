@@ -17,7 +17,7 @@ export function render(resume) {
   // We inline nested @import directives so the exported HTML is fully self-contained.
   let wmCss = '';
   try {
-    const wmCssUrl = import.meta.resolve('@wintermuted/wintermuted-ui-library/index.css');
+    const wmCssUrl = import.meta.resolve('@wintermuted/ui-theme/index.css');
     wmCss = inlineCssImports(new URL(wmCssUrl)) + '\n';
   } catch {
     // import.meta.resolve can fail when the theme is loaded via a file: symlink chain
@@ -25,8 +25,8 @@ export function render(resume) {
     let dir = import.meta.dirname;
     for (let i = 0; i < 6; i++) {
       const candidates = [
-        path.join(dir, 'node_modules', '@wintermuted', 'wintermuted-ui-library', 'index.css'),
         path.join(dir, 'node_modules', '@wintermuted', 'ui-theme', 'index.css'),
+        path.join(dir, 'node_modules', '@wintermuted', 'wintermuted-ui-library', 'index.css'),
       ];
       for (const candidate of candidates) {
         if (fs.existsSync(candidate)) {
@@ -41,10 +41,10 @@ export function render(resume) {
     }
 
     // Local sibling fallback for workspace-style checkouts:
-    // /code/jsonresume-theme-wintermuted next to /code/wintermuted-ui-library
+    // /code/jsonresume-theme-wintermuted next to /code/wintermuted-ui
     if (!wmCss) {
       const siblingCandidates = [
-        path.resolve(import.meta.dirname, '..', 'wintermuted-ui-library', 'index.css'),
+        path.resolve(import.meta.dirname, '..', 'wintermuted-ui', 'index.css'),
         path.resolve(import.meta.dirname, '..', 'wintermuted-ui-theme', 'index.css'),
       ];
       for (const siblingCandidate of siblingCandidates) {

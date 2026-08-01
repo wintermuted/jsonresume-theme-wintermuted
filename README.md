@@ -11,7 +11,7 @@ npm install jsonresume-theme-wintermuted
 Also install the shared design-token package used by this theme:
 
 ```bash
-npm install @wintermuted/wintermuted-ui-library
+npm install @wintermuted/ui-theme
 ```
 
 For local development before publish:
@@ -71,7 +71,7 @@ Workflows:
 - `partials/` section partials
 - `helpers/` helper functions
 - `style.css` theme-specific styles
-- Runtime CSS token inlining from `@wintermuted/wintermuted-ui-library`
+- Runtime CSS token inlining from `@wintermuted/ui-theme`
 
 ## Publish
 
