@@ -8,11 +8,7 @@ Open-source JSON Resume theme extracted from the private CV repository.
 npm install jsonresume-theme-wintermuted
 ```
 
-Also install the shared design-token package used by this theme:
-
-```bash
-npm install @wintermuted/wintermuted-ui-library
-```
+The shared `@wintermuted/ui-theme` package is installed automatically as a dependency of this theme.
 
 For local development before publish:
 
@@ -26,6 +22,15 @@ npm install ../jsonresume-theme-wintermuted
 resumed render resume.json -t jsonresume-theme-wintermuted -o resume.html
 ```
 
+## Scripts
+
+The package includes these local preview scripts:
+
+- `npm run preview:render` renders `examples/resume.sample.json` to `examples/preview.html`
+- `npm run preview:serve` serves the repository at `http://localhost:4175/`
+- `npm run preview:open` opens `http://localhost:4175/examples/preview.html`
+- `npm run preview:view` renders the sample, ensures a local server is available, and opens the preview page
+
 ## Local Viewing
 
 This repository includes a sample resume payload for quickly previewing theme changes.
@@ -37,6 +42,13 @@ npm run preview:open
 ```
 
 `preview:render` uses the local theme renderer (`index.js`) directly, so it works in this repository without publishing or npm linking.
+
+Recommended local preview flow:
+
+1. Run `npm run preview:render` after changing templates, helpers, or CSS.
+2. Run `npm run preview:serve` to start the local preview server.
+3. Run `npm run preview:open` to open the rendered sample resume.
+4. Use `npm run preview:view` when you want the render, server check, and open steps handled for you.
 
 Files:
 
@@ -71,7 +83,7 @@ Workflows:
 - `partials/` section partials
 - `helpers/` helper functions
 - `style.css` theme-specific styles
-- Runtime CSS token inlining from `@wintermuted/wintermuted-ui-library`
+- Runtime CSS token inlining from `@wintermuted/ui-theme`
 
 ## Publish
 
@@ -83,9 +95,10 @@ For automated publishing, this repo is configured for npm trusted publishing fro
 
 Release flow:
 
-1. Bump `package.json` version.
-2. Merge or push that change to `main`.
-3. The `Publish And Release` workflow publishes the package to npm.
-4. The workflow creates a matching GitHub release tagged `v<version>`.
+1. Merge or push changes to `main`.
+2. The `Publish And Release` workflow computes the next patch version from the latest `v*` tag.
+3. The workflow updates `package.json` and `package-lock.json`, commits the version bump back to `main`, and publishes the package to npm.
+4. The workflow creates and pushes the matching `v<version>` tag.
+5. The workflow creates the corresponding GitHub release.
 
 Because trusted publishing is enabled, no long-lived `NPM_TOKEN` secret is required for the GitHub Actions publish step.
