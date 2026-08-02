@@ -10,7 +10,2855 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
-    <style>/* =========================================================
+    <style>/* Shared Wintermuted UI theme.
+   Derived from the CV design language and generalized for app reuse. */
+/* Shared Wintermuted UI theme tokens. */
+
+:root {
+  --wm-font-sans: "Inter", "Sohne", "Söhne", system-ui, -apple-system, "Segoe UI",
+    helvetica, arial, sans-serif;
+  --wm-color-text: #0d0d0d;
+  --wm-color-bg: #fff;
+  --wm-color-surface: rgb(255 255 255 / 86%);
+  --wm-color-surface-solid: #fbfbfb;
+  --wm-color-surface-muted: #f7f7f7;
+  --wm-color-surface-strong: #efefef;
+  --wm-color-text-secondary: #353535;
+  --wm-color-text-muted: #6e6e6e;
+  --wm-color-text-faint: #8e8e8e;
+  --wm-color-border: #e5e5e5;
+  --wm-color-border-strong: #d8d8d8;
+  --wm-color-link-underline: #d1d1d1;
+  --wm-color-accent: #2a4a8a;
+  --wm-color-accent-soft: #f0f4ff;
+  --wm-color-accent-border: #d8e0f0;
+  --wm-color-success: #137333;
+  --wm-color-success-soft: #e6f4ea;
+  --wm-color-success-border: #cfe6d4;
+  --wm-color-warning: #ea8600;
+  --wm-color-warning-soft: #fff7e0;
+  --wm-color-warning-border: #f6d28b;
+  --wm-color-danger: #c5221f;
+  --wm-color-danger-soft: #fce8e6;
+  --wm-color-danger-border: #f4c3c1;
+  --wm-control-on: #0285ff;
+  --wm-control-off: #d2d2d2;
+  --wm-control-thumb: #fff;
+  --wm-shadow-soft: 0 18px 40px -30px rgb(13 13 13 / 28%);
+  --wm-radius-xs: 4px;
+  --wm-radius-base: 8px;
+  --wm-radius-sm: 10px;
+  --wm-radius-md: 16px;
+  --wm-radius-lg: 24px;
+  --wm-radius-pill: 999px;
+}
+
+[data-theme="dark"] {
+  --wm-color-text: #e0e0e0;
+  --wm-color-bg: #141414;
+  --wm-color-surface: rgb(28 28 28 / 88%);
+  --wm-color-surface-solid: #1c1c1c;
+  --wm-color-surface-muted: #181818;
+  --wm-color-surface-strong: #202020;
+  --wm-color-text-secondary: #b8b8b8;
+  --wm-color-text-muted: #888;
+  --wm-color-text-faint: #666;
+  --wm-color-border: #2e2e2e;
+  --wm-color-border-strong: #3a3a3a;
+  --wm-color-link-underline: #444;
+  --wm-color-accent: #7aa0e8;
+  --wm-color-accent-soft: #1a2240;
+  --wm-color-accent-border: #2a3560;
+  --wm-color-success: #78d49a;
+  --wm-color-success-soft: #132719;
+  --wm-color-success-border: #21452c;
+  --wm-color-warning: #ffb95a;
+  --wm-color-warning-soft: #35250f;
+  --wm-color-warning-border: #5e441d;
+  --wm-color-danger: #ff978f;
+  --wm-color-danger-soft: #351615;
+  --wm-color-danger-border: #5d2623;
+  --wm-control-on: #0285ff;
+  --wm-control-off: #414141;
+  --wm-control-thumb: #dcdcdc;
+}
+
+/* Base document and element styles. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--wm-font-sans);
+  color: var(--wm-color-text);
+  background:
+    radial-gradient(circle at top, rgb(42 74 138 / 8%), transparent 32rem),
+    linear-gradient(180deg, var(--wm-color-surface-muted) 0%, var(--wm-color-bg) 18rem);
+  line-height: 1.6;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+::selection {
+  background: var(--wm-color-accent-soft);
+}
+
+a {
+  color: var(--wm-color-text);
+  text-decoration: underline;
+  text-decoration-color: var(--wm-color-link-underline);
+  text-underline-offset: 0.15em;
+  transition: text-decoration-color 0.15s ease, color 0.2s ease;
+}
+
+a:hover {
+  text-decoration-color: var(--wm-color-text);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  color: var(--wm-color-text);
+  background: var(--wm-color-bg);
+  border: 1px solid var(--wm-color-border-strong);
+  border-radius: var(--wm-radius-xs);
+  padding: 0.7rem 0.85rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--wm-color-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--wm-color-accent) 12%, transparent);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--wm-color-text-faint);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+h3 {
+  font-size: 1.05rem;
+}
+
+p {
+  margin: 0;
+  color: var(--wm-color-text-secondary);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.8rem 0.9rem;
+  border-bottom: 1px solid var(--wm-color-border);
+}
+
+th {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--wm-color-text-muted);
+}
+
+:not(pre) > code {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace;
+  font-size: 0.8em;
+  background: var(--wm-color-surface-strong);
+  color: var(--wm-color-accent);
+  padding: 0.15em 0.4em;
+  border-radius: var(--wm-radius-xs);
+  border: 1px solid var(--wm-color-border);
+}
+
+/* Aggregate component styles. */
+/* ── Card ─────────────────────────────────────────────────────────────────────
+ * Base surface container. Provides background, border, radius, and elevation.
+ * Add padding via a .card-body child or directly on the element as needed.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.card,
+.wm-card {
+  background: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-md);
+  box-shadow: var(--wm-shadow-soft);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+}
+
+/* ── Structural slots ────────────────────────────────────────────────────── */
+
+/**
+ * .card-header — Title / action row at the top of the card.
+ * Sits above .card-body with a bottom border separator.
+ */
+.card-header,
+.wm-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid var(--wm-color-border);
+}
+
+.card-header h3,
+.card-header h4,
+.wm-card-header h3,
+.wm-card-header h4 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+/**
+ * .card-body — Primary content area.
+ * Provides consistent internal padding.
+ */
+.card-body,
+.wm-card-body {
+  padding: 1.25rem;
+}
+
+/**
+ * .card-footer — Secondary action / metadata row at the bottom.
+ * Muted surface with a top border separator.
+ */
+.card-footer,
+.wm-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--wm-color-border);
+  background: var(--wm-color-surface-muted);
+}
+
+/* ── Accent border variants ──────────────────────────────────────────────── */
+
+/**
+ * Left-border accent variants. Communicate semantic tone at a glance.
+ * Apply to .card in addition to the base class.
+ *
+ *   <div class="card card-accent-success">…</div>
+ */
+
+.card-accent-info,
+.wm-card-accent-info {
+  border-left: 4px solid var(--wm-color-accent);
+}
+
+.card-accent-success,
+.wm-card-accent-success {
+  border-left: 4px solid var(--wm-color-success);
+}
+
+.card-accent-warning,
+.wm-card-accent-warning {
+  border-left: 4px solid var(--wm-color-warning);
+}
+
+.card-accent-danger,
+.wm-card-accent-danger {
+  border-left: 4px solid var(--wm-color-danger);
+}
+
+/* Button variants and sizes. */
+
+.btn,
+.wm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--wm-radius-xs);
+  background: var(--wm-color-surface-strong);
+  color: var(--wm-color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.btn:hover,
+.wm-btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:disabled,
+.wm-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary,
+.wm-btn-primary {
+  background: var(--wm-color-accent-soft);
+  border-color: var(--wm-color-accent-border);
+  color: var(--wm-color-accent);
+}
+
+.btn-primary:hover,
+.wm-btn-primary:hover {
+  background: color-mix(in srgb, var(--wm-color-accent-soft) 68%, white);
+}
+
+.btn-secondary,
+.wm-btn-secondary,
+.btn-ghost,
+.wm-btn-ghost {
+  background: var(--wm-color-surface-strong);
+  border-color: var(--wm-color-border);
+  color: var(--wm-color-text-secondary);
+}
+
+.btn-primary-neutral,
+.wm-btn-primary-neutral {
+  background: var(--wm-color-surface-strong);
+  border-color: var(--wm-color-border-strong);
+  color: var(--wm-color-text);
+}
+
+.btn-primary-neutral:hover,
+.wm-btn-primary-neutral:hover {
+  background: var(--wm-color-surface-muted);
+}
+
+[data-theme="dark"] .btn-primary-neutral,
+[data-theme="dark"] .wm-btn-primary-neutral {
+  background: #fff;
+  border-color: #fff;
+  color: #0d0d0d;
+}
+
+[data-theme="dark"] .btn-primary-neutral:hover,
+[data-theme="dark"] .wm-btn-primary-neutral:hover {
+  background: #f2f2f2;
+  border-color: #f2f2f2;
+}
+
+.btn-secondary-neutral,
+.wm-btn-secondary-neutral {
+  background: transparent;
+  border-color: var(--wm-color-border);
+  color: var(--wm-color-text-secondary);
+}
+
+.btn-secondary-neutral:hover,
+.wm-btn-secondary-neutral:hover {
+  background: var(--wm-color-surface-strong);
+  color: var(--wm-color-text);
+}
+
+.btn-secondary:hover,
+.wm-btn-secondary:hover,
+.btn-ghost:hover,
+.wm-btn-ghost:hover {
+  background: var(--wm-color-surface-muted);
+}
+
+.btn-danger,
+.wm-btn-danger {
+  background: var(--wm-color-danger-soft);
+  border-color: var(--wm-color-danger-border);
+  color: var(--wm-color-danger);
+}
+
+.btn-danger:hover,
+.wm-btn-danger:hover {
+  background: color-mix(in srgb, var(--wm-color-danger-soft) 80%, white);
+}
+
+.btn-success,
+.wm-btn-success {
+  background: var(--wm-color-success-soft);
+  border-color: var(--wm-color-success-border);
+  color: var(--wm-color-success);
+}
+
+.btn-warning,
+.wm-btn-warning {
+  background: var(--wm-color-warning-soft);
+  border-color: var(--wm-color-warning-border);
+  color: var(--wm-color-warning);
+}
+
+.btn-sm,
+.wm-btn-sm {
+  min-height: unset;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.7rem;
+}
+
+.btn-link,
+.wm-btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--wm-color-accent);
+  font-size: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: unset;
+  letter-spacing: 0;
+  text-transform: none;
+  border-radius: 0;
+}
+
+.btn-link:hover,
+.wm-btn-link:hover {
+  color: color-mix(in srgb, var(--wm-color-accent) 82%, black);
+  background: none;
+  transform: none;
+}
+
+/**
+ * .btn-square / .wm-btn-square
+ * Shape modifier alias for explicitness in markup. Base buttons are already
+ * squared by default; this class keeps the rectangular treatment when teams
+ * prefer shape to be opt-in at call sites. Combine with any
+ * semantic variant (.btn-primary, .btn-secondary, etc.).
+ *
+ *   <button class="btn btn-primary btn-square">Start</button>
+ *   <button class="btn btn-secondary btn-square btn-sm">Next</button>
+ */
+.btn-square,
+.wm-btn-square {
+  border-radius: var(--wm-radius-xs);
+}
+
+/**
+ * .btn-pill / .wm-btn-pill
+ * Compact muted pill for UI chrome controls (theme toggle, view toggle, print).
+ * No action affordance — use for low-emphasis utility controls only.
+ */
+.btn-pill,
+.wm-btn-pill {
+  background: var(--wm-color-surface-strong);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-pill);
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--wm-color-text-muted);
+  line-height: 1;
+  min-height: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.btn-pill:hover,
+.wm-btn-pill:hover {
+  background: var(--wm-color-surface-muted);
+  color: var(--wm-color-text);
+}
+
+/**
+ * .btn-group / .wm-btn-group
+ * Connects a set of buttons into a single horizontal unit by collapsing
+ * internal borders and square-off the inner corners. Works with any
+ * semantic variant and the .btn-sm size modifier.
+ *
+ *   <div class="btn-group">
+ *     <button class="btn btn-secondary btn-sm">Left</button>
+ *     <button class="btn btn-secondary btn-sm">Middle</button>
+ *     <button class="btn btn-secondary btn-sm">Right</button>
+ *   </div>
+ */
+.btn-group,
+.wm-btn-group {
+  display: inline-flex;
+}
+
+.btn-group > .btn,
+.btn-group > .wm-btn,
+.wm-btn-group > .btn,
+.wm-btn-group > .wm-btn {
+  border-radius: 0;
+}
+
+.btn-group > .btn:first-child,
+.btn-group > .wm-btn:first-child,
+.wm-btn-group > .btn:first-child,
+.wm-btn-group > .wm-btn:first-child {
+  border-radius: var(--wm-radius-xs) 0 0 var(--wm-radius-xs);
+}
+
+.btn-group > .btn:last-child,
+.btn-group > .wm-btn:last-child,
+.wm-btn-group > .btn:last-child,
+.wm-btn-group > .wm-btn:last-child {
+  border-radius: 0 var(--wm-radius-xs) var(--wm-radius-xs) 0;
+}
+
+.btn-group > .btn:not(:first-child),
+.btn-group > .wm-btn:not(:first-child),
+.wm-btn-group > .btn:not(:first-child),
+.wm-btn-group > .wm-btn:not(:first-child) {
+  margin-left: -1px;
+}
+
+.btn-group > .btn:hover,
+.btn-group > .wm-btn:hover,
+.wm-btn-group > .btn:hover,
+.wm-btn-group > .wm-btn:hover {
+  position: relative;
+  z-index: 1;
+}
+
+/**
+ * .btn-expand / .wm-btn-expand
+ * Borderless disclosure / section-expansion trigger. Use for inline "Show
+ * more", "Show examples", expand-collapse controls where a full button
+ * treatment would be too heavy. Renders as a muted text row with a leading
+ * chevron that rotates when the [aria-expanded="true"] state is set.
+ *
+ *   <button class="btn btn-expand" aria-expanded="false">Show examples</button>
+ *   <button class="btn btn-expand" aria-expanded="true">Hide examples</button>
+ */
+.btn-expand,
+.wm-btn-expand {
+  background: none;
+  border: none;
+  padding: 0.2rem 0;
+  min-height: unset;
+  gap: 0.3rem;
+  color: var(--wm-color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  border-radius: 0;
+  transition: color 0.15s ease;
+}
+
+.btn-expand::before,
+.wm-btn-expand::before {
+  content: '▶';
+  display: inline-block;
+  font-size: 0.6em;
+  transition: transform 0.2s ease;
+}
+
+.btn-expand[aria-expanded="true"]::before,
+.wm-btn-expand[aria-expanded="true"]::before {
+  transform: rotate(90deg);
+}
+
+.btn-expand:hover,
+.wm-btn-expand:hover {
+  color: var(--wm-color-text);
+  background: none;
+  transform: none;
+}
+
+.btn-expand:disabled,
+.wm-btn-expand:disabled {
+  color: var(--wm-color-text-muted);
+  opacity: 0.5;
+}
+
+/* Badge primitive. */
+
+.badge,
+.wm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.65rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-pill);
+  background: var(--wm-color-surface-muted);
+  color: var(--wm-color-text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Tag pills. */
+
+.tag,
+.wm-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-pill);
+  background: var(--wm-color-surface-muted);
+  color: var(--wm-color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.tag-accent,
+.wm-tag-accent {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--wm-color-accent-border);
+  border-radius: var(--wm-radius-pill);
+  background: var(--wm-color-accent-soft);
+  color: var(--wm-color-accent);
+  font-size: 0.75rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* Styled list with custom bullet markers. */
+
+.wm-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--wm-color-text-secondary);
+  line-height: 1.6;
+}
+
+.wm-list li {
+  position: relative;
+  padding-left: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.wm-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 4px;
+  height: 4px;
+  background: var(--wm-color-text-faint);
+  border-radius: 50%;
+}
+
+/* Content separator primitive. */
+
+.wm-separator {
+  border: none;
+  border-top: 1px solid var(--wm-color-border);
+  margin: 1.25rem 0;
+}
+
+/* Sticky side navigation primitive. */
+
+.wm-side-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.wm-side-nav li {
+  margin-bottom: 0.1rem;
+}
+
+.wm-side-nav a {
+  display: block;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--wm-color-text-muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--wm-radius-xs) var(--wm-radius-xs) 0;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.wm-side-nav a:hover {
+  color: var(--wm-color-text);
+  background: var(--wm-color-surface-muted);
+}
+
+.wm-side-nav a.active,
+.wm-side-nav a[aria-current] {
+  color: var(--wm-color-text);
+  border-left-color: var(--wm-color-text);
+  background: var(--wm-color-surface-muted);
+}
+
+/* Viewport-fixed controls nav (CV-style utility control cluster). */
+
+.floating-nav,
+.wm-floating-nav {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 100;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.floating-nav-left,
+.wm-floating-nav-left {
+  left: 1.25rem;
+  right: auto;
+}
+
+/* Stat card: compact metric display. Used in dashboards and summaries. */
+
+.stats-grid,
+.wm-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card,
+.wm-stat-card {
+  background: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-base, 8px);
+  padding: 1rem;
+  text-align: center;
+}
+
+.stat-value,
+.wm-stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--wm-color-accent);
+}
+
+.stat-label,
+.wm-stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--wm-color-text-muted);
+  margin-top: 0.35rem;
+}
+
+/* Semantic tonal variants */
+
+.stat-card-success,
+.wm-stat-card-success {
+  background: var(--wm-color-success-soft);
+  border-color: var(--wm-color-success-border);
+}
+
+.stat-card-success .stat-value,
+.wm-stat-card-success .wm-stat-value {
+  color: var(--wm-color-success);
+}
+
+.stat-card-warning,
+.wm-stat-card-warning {
+  background: var(--wm-color-warning-soft);
+  border-color: var(--wm-color-warning-border);
+}
+
+.stat-card-warning .stat-value,
+.wm-stat-card-warning .wm-stat-value {
+  color: var(--wm-color-warning);
+}
+
+.stat-card-danger,
+.wm-stat-card-danger {
+  background: var(--wm-color-danger-soft);
+  border-color: var(--wm-color-danger-border);
+}
+
+.stat-card-danger .stat-value,
+.wm-stat-card-danger .wm-stat-value {
+  color: var(--wm-color-danger);
+}
+
+/* Accent-left-border variants (used on card rows) */
+
+.card-accent-success,
+.wm-card-accent-success {
+  border-left: 4px solid var(--wm-color-success);
+}
+
+.card-accent-warning,
+.wm-card-accent-warning {
+  border-left: 4px solid var(--wm-color-warning);
+}
+
+/* Tab bar: segmented control for view switching. */
+
+.tab-bar,
+.wm-tab-bar {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-base, 8px);
+  overflow: hidden;
+  width: fit-content;
+}
+
+.tab-btn,
+.wm-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-right: 1px solid var(--wm-color-border);
+  background: var(--wm-color-surface);
+  color: var(--wm-color-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.tab-btn:last-child,
+.wm-tab-btn:last-child {
+  border-right: none;
+}
+
+.tab-btn:hover,
+.wm-tab-btn:hover {
+  background: var(--wm-color-surface-strong);
+}
+
+.tab-btn-active,
+.wm-tab-btn-active {
+  background: var(--wm-color-accent-soft);
+  color: var(--wm-color-accent);
+  border-right-color: var(--wm-color-accent-border);
+}
+
+.tab-btn-active:hover,
+.wm-tab-btn-active:hover {
+  background: color-mix(in srgb, var(--wm-color-accent-soft) 75%, var(--wm-color-accent-border));
+}
+
+/* Badge count inside a tab */
+
+.tab-count,
+.wm-tab-count {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.05rem 0.35rem;
+  border-radius: var(--wm-radius-base, 8px);
+  background: rgb(0 0 0 / 7%);
+}
+
+.tab-btn-active .tab-count,
+.wm-tab-btn-active .wm-tab-count {
+  background: color-mix(in srgb, var(--wm-color-accent) 15%, transparent);
+}
+
+/* Section label above a tab group or filter set */
+
+.tab-section-label,
+.wm-tab-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--wm-color-text-muted);
+  margin-bottom: 0.35rem;
+}
+
+/* ── Status toggle: pill-shaped multi-state filter ─────────────────────── */
+
+.status-toggle,
+.wm-status-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.status-toggle-btn,
+.wm-status-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--wm-radius-pill, 999px);
+  border: 2px solid transparent;
+  background: var(--wm-color-surface-strong);
+  color: var(--wm-color-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.status-toggle-btn:hover,
+.wm-status-toggle-btn:hover {
+  background: var(--wm-color-surface-strong);
+}
+
+/* Active tonal states */
+
+.status-toggle-btn-active,
+.wm-status-toggle-btn-active {
+  background: var(--wm-color-accent-soft);
+  border-color: var(--wm-color-accent-border);
+  color: var(--wm-color-accent);
+}
+
+.status-toggle-btn-success.status-toggle-btn-active,
+.wm-status-toggle-btn-success.wm-status-toggle-btn-active {
+  background: var(--wm-color-success-soft);
+  border-color: var(--wm-color-success-border);
+  color: var(--wm-color-success);
+}
+
+.status-toggle-btn-warning.status-toggle-btn-active,
+.wm-status-toggle-btn-warning.wm-status-toggle-btn-active {
+  background: var(--wm-color-warning-soft);
+  border-color: var(--wm-color-warning-border);
+  color: var(--wm-color-warning);
+}
+
+.status-toggle-btn-muted.status-toggle-btn-active,
+.wm-status-toggle-btn-muted.wm-status-toggle-btn-active {
+  background: var(--wm-color-surface-strong);
+  border-color: var(--wm-color-border-strong);
+  color: var(--wm-color-text-muted);
+}
+
+/* Inactive semantic border hints (color-coded even when not active) */
+
+.status-toggle-btn-success,
+.wm-status-toggle-btn-success {
+  border-color: var(--wm-color-success-border);
+  color: var(--wm-color-success);
+}
+
+.status-toggle-btn-success:hover,
+.wm-status-toggle-btn-success:hover {
+  background: var(--wm-color-success-soft);
+}
+
+.status-toggle-btn-warning,
+.wm-status-toggle-btn-warning {
+  border-color: var(--wm-color-warning-border);
+  color: var(--wm-color-warning);
+}
+
+.status-toggle-btn-warning:hover,
+.wm-status-toggle-btn-warning:hover {
+  background: var(--wm-color-warning-soft);
+}
+
+.status-toggle-btn-muted,
+.wm-status-toggle-btn-muted {
+  border-color: var(--wm-color-border-strong);
+  color: var(--wm-color-text-muted);
+}
+
+.status-toggle-btn-muted:hover,
+.wm-status-toggle-btn-muted:hover {
+  background: var(--wm-color-surface-strong);
+}
+
+/* Modal: overlay + panel pattern for focused dialogs. */
+
+.modal-overlay,
+.wm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--wm-color-text, #000) 36%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-panel,
+.wm-modal-panel {
+  background: var(--wm-color-surface);
+  border-radius: var(--wm-radius-sm, 12px);
+  box-shadow: var(--wm-shadow-soft, 0 8px 32px rgb(0 0 0 / 18%));
+  border: 1px solid var(--wm-color-border);
+  width: 100%;
+  max-width: 640px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header,
+.wm-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--wm-color-border);
+}
+
+.modal-title,
+.wm-modal-title {
+  margin: 0 0 0.15rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.modal-subtitle,
+.wm-modal-subtitle {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--wm-color-text-muted);
+}
+
+.modal-header-actions,
+.wm-modal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-close-btn,
+.wm-modal-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--wm-color-text-muted);
+  padding: 0.25rem;
+  border-radius: var(--wm-radius-xs, 4px);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.modal-close-btn:hover,
+.wm-modal-close-btn:hover {
+  background: var(--wm-color-surface-strong);
+  color: var(--wm-color-text);
+}
+
+.modal-body,
+.wm-modal-body {
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+}
+
+.modal-footer,
+.wm-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--wm-color-border);
+}
+
+/* Empty state: centered placeholder for zero-data views. */
+
+.empty-state,
+.wm-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--wm-color-text-muted);
+}
+
+.empty-state h2,
+.empty-state h3,
+.wm-empty-state h2,
+.wm-empty-state h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--wm-color-text-secondary);
+}
+
+.empty-state p,
+.wm-empty-state p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* File upload: drag-and-drop target zone. */
+
+.file-upload,
+.wm-file-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 2px dashed var(--wm-color-border-strong);
+  border-radius: var(--wm-radius-xs, 4px);
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  color: var(--wm-color-text-muted);
+  font-size: 0.9rem;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.file-upload:hover,
+.wm-file-upload:hover {
+  border-color: var(--wm-color-accent);
+  background: color-mix(in srgb, var(--wm-color-accent-soft) 35%, transparent);
+}
+
+.file-upload input[type="file"],
+.wm-file-upload input[type="file"] {
+  display: none;
+}
+
+/* View header: flat page section header with title + subtitle. */
+
+.view-header,
+.wm-view-header {
+  margin-bottom: 1.5rem;
+}
+
+.view-header h2,
+.wm-view-header h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.3rem;
+  color: var(--wm-color-text);
+}
+
+.view-header p,
+.wm-view-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--wm-color-text-muted);
+}
+
+/* Filter bar: single-row row with bottom-border only and tight controls. */
+
+.filter-bar,
+.wm-filter-bar {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--wm-color-border);
+}
+
+.filter-group,
+.wm-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filter-label,
+.wm-filter-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--wm-color-text-muted);
+}
+
+.filter-select,
+.wm-filter-select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--wm-color-border-strong);
+  border-radius: var(--wm-radius-xs, 4px);
+  background: var(--wm-color-surface);
+  color: var(--wm-color-text);
+  font-size: 0.875rem;
+}
+
+/* ── Layout: App Shell & Two-Column Sidebar Layout ─────────────────────────── */
+
+/**
+ * .app-shell / .wm-app-shell
+ * Centered, max-width page wrapper. Apply to the outermost <div> or <main>.
+ */
+.app-shell,
+.wm-app-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/**
+ * .app-header / .wm-app-header
+ * Horizontal top bar with brand, nav, and action zones. Bottom-border divider.
+ */
+.app-header,
+.wm-app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--wm-color-border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+/**
+ * .app-brand / .wm-app-brand
+ * Column stack for app name + optional byline.
+ */
+.app-brand,
+.wm-app-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.app-brand h1,
+.wm-app-brand h1 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+/**
+ * .app-byline / .wm-app-byline
+ * Muted italic tagline below the app title.
+ */
+.app-byline,
+.wm-app-byline {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--wm-color-text-muted);
+  font-style: italic;
+}
+
+/**
+ * .app-nav / .wm-app-nav
+ * Horizontal navigation link row inside .app-header.
+ * Anchor children get hover + active states.
+ */
+.app-nav,
+.wm-app-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/**
+ * .app-nav-nowrap / .wm-app-nav-nowrap
+ * Optional utility to keep nav links on one row with horizontal scroll instead
+ * of wrapping and compressing content.
+ */
+.app-nav-nowrap,
+.wm-app-nav-nowrap {
+  flex-wrap: nowrap;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.app-nav a,
+.wm-app-nav a {
+  text-decoration: none;
+  color: var(--wm-color-text-secondary);
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--wm-radius-xs, 4px);
+  transition: background-color 0.15s;
+}
+
+.app-nav a:hover,
+.wm-app-nav a:hover {
+  background-color: var(--wm-color-surface-strong);
+}
+
+.app-nav a.active,
+.wm-app-nav a.active {
+  color: var(--wm-color-accent);
+  text-decoration: underline;
+  text-decoration-color: var(--wm-color-accent);
+  text-underline-offset: 0.2em;
+}
+
+/**
+ * .app-header-actions / .wm-app-header-actions
+ * Right-aligned row of buttons or utility controls.
+ */
+.app-header-actions,
+.wm-app-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* ── Docs Topbar Layout Pattern ───────────────────────────────────────────── */
+
+/**
+ * .docs-topbar / .wm-docs-topbar
+ * Sticky docs-style top bar with subtle blur and soft surface blending.
+ */
+.docs-topbar,
+.wm-docs-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, var(--wm-color-bg) 84%, transparent);
+  border-bottom: 1px solid var(--wm-color-border);
+}
+
+/**
+ * .docs-topbar-inner / .wm-docs-topbar-inner
+ * Horizontal row container for brand, nav, and actions.
+ */
+.docs-topbar-inner,
+.wm-docs-topbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.65rem 1.6rem;
+}
+
+/**
+ * .docs-topbar-brand / .wm-docs-topbar-brand
+ * Compact brand block for docs/product title.
+ */
+.docs-topbar-brand,
+.wm-docs-topbar-brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--wm-color-text);
+  white-space: nowrap;
+}
+
+.docs-topbar-brand h1,
+.wm-docs-topbar-brand h1 {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/**
+ * .docs-topbar-nav / .wm-docs-topbar-nav
+ * Horizontal scroll-safe link row.
+ */
+.docs-topbar-nav,
+.wm-docs-topbar-nav {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding-bottom: 0.05rem;
+}
+
+/**
+ * .docs-topbar-link / .wm-docs-topbar-link
+ * Pill links with hover and active states.
+ */
+.docs-topbar-link,
+.wm-docs-topbar-link {
+  text-decoration: none;
+  color: var(--wm-color-text-muted);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.33rem 0.62rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.docs-topbar-link:hover,
+.wm-docs-topbar-link:hover {
+  color: var(--wm-color-text);
+  background: color-mix(in srgb, var(--wm-color-surface-solid) 60%, var(--wm-color-surface-muted));
+  border-color: var(--wm-color-border);
+}
+
+.docs-topbar-link.is-active,
+.wm-docs-topbar-link.is-active {
+  color: var(--wm-color-text);
+  background: color-mix(in srgb, var(--wm-color-accent-soft) 60%, transparent);
+  border-color: var(--wm-color-accent-border);
+}
+
+/**
+ * .docs-topbar-link-devdocs / .wm-docs-topbar-link-devdocs
+ * Minimal docs-tab link style modeled after developer docs top nav patterns.
+ * Designed for product-level tabs like Home/About where active state is shown
+ * via a bottom border rather than pill backgrounds.
+ */
+.docs-topbar-link-devdocs,
+.wm-docs-topbar-link-devdocs {
+  text-decoration: none;
+  color: var(--wm-color-text-muted);
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.46rem 0.12rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-bottom-color 0.15s ease;
+}
+
+.docs-topbar-link-devdocs:hover,
+.wm-docs-topbar-link-devdocs:hover {
+  color: var(--wm-color-text);
+  border-bottom-color: var(--wm-color-border-strong);
+  background: transparent;
+}
+
+.docs-topbar-link-devdocs.is-active,
+.wm-docs-topbar-link-devdocs.is-active,
+.docs-topbar-link-devdocs[aria-current="page"],
+.wm-docs-topbar-link-devdocs[aria-current="page"] {
+  color: var(--wm-color-text);
+  border-bottom-color: var(--wm-color-text);
+  background: transparent;
+}
+
+/**
+ * .docs-topbar-actions / .wm-docs-topbar-actions
+ * Right-aligned utility control row.
+ */
+.docs-topbar-actions,
+.wm-docs-topbar-actions {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.docs-topbar-toggle,
+.wm-docs-topbar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.72rem;
+  font-weight: 500;
+  font-family: inherit;
+  padding: 0.33rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--wm-color-border);
+  background: transparent;
+  color: var(--wm-color-text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.docs-topbar-toggle:hover,
+.wm-docs-topbar-toggle:hover {
+  background: color-mix(in srgb, var(--wm-color-surface-solid) 60%, var(--wm-color-surface-muted));
+  color: var(--wm-color-text);
+  border-color: var(--wm-color-accent-border);
+}
+
+.docs-topbar-toggle svg,
+.wm-docs-topbar-toggle svg {
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+}
+
+.docs-topbar-version,
+.wm-docs-topbar-version {
+  font-size: 0.72rem;
+  font-weight: 500;
+  font-family: inherit;
+  padding: 0.28rem 1.6rem 0.28rem 0.6rem;
+  border-radius: var(--wm-radius-xs, 4px);
+  border: none;
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
+    no-repeat right 0.45rem center;
+  color: var(--wm-color-text-muted);
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.docs-topbar-version:hover,
+.docs-topbar-version:focus,
+.wm-docs-topbar-version:hover,
+.wm-docs-topbar-version:focus {
+  background-color: var(--wm-color-surface-muted);
+  color: var(--wm-color-text);
+}
+
+.docs-topbar-github,
+.wm-docs-topbar-github {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--wm-color-text-muted);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.docs-topbar-github:hover,
+.wm-docs-topbar-github:hover {
+  color: var(--wm-color-text);
+  background: color-mix(in srgb, var(--wm-color-surface-solid) 60%, var(--wm-color-surface-muted));
+}
+
+.docs-topbar-github svg,
+.wm-docs-topbar-github svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+@media (width <= 767px) {
+  .docs-topbar-inner,
+  .wm-docs-topbar-inner {
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .docs-topbar-actions,
+  .wm-docs-topbar-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+/* ── Two-Column Sidebar + Main ──────────────────────────────────────────────── */
+
+/**
+ * .sidebar-layout / .wm-sidebar-layout
+ * Flex row: narrow fixed sidebar on left, flex-1 main panel on right.
+ * Collapses to a vertical stack at ≤768 px.
+ */
+.sidebar-layout,
+.wm-sidebar-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+/**
+ * .sidebar-layout-stretch / .wm-sidebar-layout-stretch
+ * Optional utility for app workspaces that require both columns to stretch
+ * to the container height (useful for sticky controls and independent rail scroll).
+ */
+.sidebar-layout-stretch,
+.wm-sidebar-layout-stretch {
+  align-items: stretch;
+}
+
+/**
+ * .sidebar-layout-aside / .wm-sidebar-layout-aside
+ * Fixed-width left column. Right border acts as a divider.
+ */
+.sidebar-layout-aside,
+.wm-sidebar-layout-aside {
+  flex: 0 1 var(--wm-sidebar-aside-width, 220px);
+  width: var(--wm-sidebar-aside-width, 220px);
+  min-width: var(--wm-sidebar-aside-min-width, var(--wm-sidebar-aside-width, 220px));
+  max-width: var(--wm-sidebar-aside-max-width, var(--wm-sidebar-aside-width, 220px));
+  border-right: 1px solid var(--wm-color-border);
+  padding-right: 1rem;
+}
+
+/**
+ * .sidebar-layout-aside-no-divider / .wm-sidebar-layout-aside-no-divider
+ * Optional utility to remove the aside divider for seamless split layouts.
+ */
+.sidebar-layout-aside-no-divider,
+.wm-sidebar-layout-aside-no-divider {
+  border-right: none;
+  padding-right: 0;
+}
+
+/**
+ * .sidebar-layout-main / .wm-sidebar-layout-main
+ * Grows to fill remaining width. min-width:0 prevents flex blowout.
+ */
+.sidebar-layout-main,
+.wm-sidebar-layout-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/**
+ * .sticky-bottom / .wm-sticky-bottom
+ * Optional utility for controls/toolbars that should remain pinned to the
+ * bottom edge of the scrolling layout region.
+ */
+.sticky-bottom,
+.wm-sticky-bottom {
+  position: sticky;
+  bottom: 0;
+}
+
+/**
+ * .sidebar-section-title / .wm-sidebar-section-title
+ * Small-caps section label at the top of a sidebar column.
+ */
+.sidebar-section-title,
+.wm-sidebar-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--wm-color-text-muted);
+  margin: 0 0 0.75rem;
+}
+
+/* ── Entry Header ───────────────────────────────────────────────────────────── */
+
+/**
+ * .entry-header / .wm-entry-header
+ * Two-column header row: title/name on the left, date or meta on the right.
+ * Use for resume-style entries, work history rows, timeline items, etc.
+ * Wraps gracefully on narrow viewports.
+ */
+.entry-header,
+.wm-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+
+/**
+ * .entry-date / .wm-entry-date
+ * Small muted timestamp or date range. Right-aligned inside .entry-header.
+ */
+.entry-date,
+.wm-entry-date {
+  font-size: 0.8rem;
+  color: var(--wm-color-text-muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/**
+ * .entry-meta / .wm-entry-meta
+ * Small muted secondary detail (location, category, type) below or beside a title.
+ */
+.entry-meta,
+.wm-entry-meta {
+  font-size: 0.8rem;
+  color: var(--wm-color-text-muted);
+}
+
+/* ── Content Grid ───────────────────────────────────────────────────────────── */
+
+/**
+ * .content-grid / .wm-content-grid
+ * Responsive auto-fill grid for equal-width content tiles (skills, features, cards).
+ * Each cell is at least 220 px wide and expands to fill available space.
+ */
+.content-grid,
+.wm-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem 2rem;
+}
+
+@media (width <= 768px) {
+  .app-header,
+  .wm-app-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .app-header-actions,
+  .wm-app-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .sidebar-layout,
+  .wm-sidebar-layout {
+    flex-direction: column;
+  }
+
+  .sidebar-layout-aside,
+  .wm-sidebar-layout-aside {
+    flex: none;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--wm-color-border);
+    padding-right: 0;
+    padding-bottom: 0.75rem;
+  }
+}
+
+/* ── Inline Panels: Tonal in-context info blocks ────────────────────────────── */
+
+/**
+ * .inline-panel / .wm-inline-panel
+ * Muted-surface inline info block. Use inside cards or below form fields
+ * to surface contextual information without a full alert bar.
+ * Add a semantic modifier for tonal color: -warning, -success, -danger, -accent.
+ */
+.inline-panel,
+.wm-inline-panel {
+  background: var(--wm-color-surface-muted);
+  border-radius: var(--wm-radius-xs, 4px);
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.inline-panel a,
+.wm-inline-panel a {
+  color: var(--wm-color-accent);
+  font-weight: 500;
+}
+
+/* ── Tonal modifiers ────────────────────────────────────────────────────────── */
+
+.inline-panel-accent,
+.wm-inline-panel-accent {
+  background: var(--wm-color-accent-soft);
+  border: 1px solid var(--wm-color-accent-border);
+  color: var(--wm-color-accent);
+}
+
+.inline-panel-success,
+.wm-inline-panel-success {
+  background: var(--wm-color-success-soft);
+  border: 1px solid var(--wm-color-success-border);
+  color: var(--wm-color-success);
+}
+
+.inline-panel-warning,
+.wm-inline-panel-warning {
+  background: var(--wm-color-warning-soft);
+  border: 1px solid var(--wm-color-warning-border);
+  color: var(--wm-color-warning);
+}
+
+.inline-panel-danger,
+.wm-inline-panel-danger {
+  background: var(--wm-color-danger-soft);
+  border: 1px solid var(--wm-color-danger-border);
+  color: var(--wm-color-danger);
+}
+
+/* ── Checkbox Filter List ────────────────────────────────────────────────────── */
+
+/**
+ * .checkbox-filter-group / .wm-checkbox-filter-group
+ * Vertical stack of labeled checkbox rows. Used in sidebar filter panels.
+ */
+.checkbox-filter-group,
+.wm-checkbox-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+/**
+ * .checkbox-filter-label / .wm-checkbox-filter-label
+ * Clickable row: checkbox + name + optional count badge.
+ * The <label> wraps both the <input> and the text so the full row is tappable.
+ */
+.checkbox-filter-label,
+.wm-checkbox-filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.25rem;
+  border-radius: var(--wm-radius-xs, 4px);
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--wm-color-text-secondary);
+  transition: background-color 0.1s;
+  user-select: none;
+}
+
+.checkbox-filter-label:hover,
+.wm-checkbox-filter-label:hover {
+  background: var(--wm-color-surface-strong);
+}
+
+.checkbox-filter-label input[type="checkbox"],
+.wm-checkbox-filter-label input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--wm-color-accent);
+}
+
+/**
+ * .checkbox-filter-name / .wm-checkbox-filter-name
+ * Text portion of the label — grows to fill available space.
+ */
+.checkbox-filter-name,
+.wm-checkbox-filter-name {
+  flex: 1;
+}
+
+/**
+ * .checkbox-filter-count / .wm-checkbox-filter-count
+ * Small count badge aligned to the right of each row.
+ */
+.checkbox-filter-count,
+.wm-checkbox-filter-count {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--wm-color-text-muted);
+  background: rgb(0 0 0 / 7%);
+  padding: 0.05rem 0.35rem;
+  border-radius: var(--wm-radius-base, 8px);
+  margin-left: auto;
+}
+
+/* ── Chart Container & Utilities ────────────────────────────────────────────── */
+
+/**
+ * .chart-container / .wm-chart-container
+ * Card wrapper for a chart. Provides a heading slot above the chart body.
+ * Typically wraps a third-party chart component (e.g. Recharts <ResponsiveContainer>).
+ */
+.chart-container,
+.wm-chart-container {
+  background: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-base, 8px);
+  padding: 1.25rem;
+}
+
+.chart-container h3,
+.wm-chart-container h3 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/**
+ * .chart-empty / .wm-chart-empty
+ * Muted placeholder text shown when no chart data is available.
+ * Render this instead of the chart library component when data is empty.
+ */
+.chart-empty,
+.wm-chart-empty {
+  color: var(--wm-color-text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+/**
+ * Token → Chart color mapping (for use with Recharts or any SVG chart library):
+ *
+ *  Role                  Token                         Typical chart use
+ *  ─────────────────     ────────────────────────────  ─────────────────────────
+ *  Primary series        --wm-color-accent             Spending / main bar
+ *  Positive / savings    --wm-color-success            Realized savings bar
+ *  Projected / muted +   --wm-color-success-border     Projected savings bar
+ *  Warning series        --wm-color-warning            Budget threshold
+ *  Danger series         --wm-color-danger             Overage / alert
+ *  Grid lines            --wm-color-border             CartesianGrid stroke
+ *  Axis text             --wm-color-text-muted         XAxis / YAxis tick color
+ *  Tooltip background    --wm-color-surface-solid      Tooltip container fill
+ *  Tooltip border        --wm-color-border             Tooltip container stroke
+ *
+ * In React, read tokens at render time via a useCssVar hook:
+ *   const color = useCssVar("--wm-color-accent", "#1a73e8");
+ * Then pass as: <Bar fill={color} />
+ */
+
+/* Image gallery grid with hover-lift thumbnails. */
+
+/**
+ * .gallery / .wm-gallery
+ * Responsive auto-fill image grid. Minimum cell width: 200 px.
+ */
+.gallery,
+.wm-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+/**
+ * .gallery-item / .wm-gallery-item
+ * Individual image cell. Border, radius, overflow clip, and hover lift.
+ * Wraps a plain <img> or an <a><img></a> pair.
+ */
+.gallery-item,
+.wm-gallery-item {
+  position: relative;
+  margin: 0;
+  border-radius: var(--wm-radius-base, 6px);
+  overflow: hidden;
+  border: 1px solid var(--wm-color-border);
+  background: var(--wm-color-surface-muted);
+  cursor: pointer;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.gallery-item:hover,
+.wm-gallery-item:hover {
+  box-shadow: var(--wm-shadow-soft);
+  transform: translateY(-2px);
+}
+
+.gallery-item img,
+.wm-gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  transition: opacity 0.2s ease;
+}
+
+/**
+ * .gallery-item-caption / .wm-gallery-item-caption
+ * Optional overlay caption that appears on hover.
+ */
+.gallery-item-caption,
+.wm-gallery-item-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.75rem;
+  color: var(--wm-color-text);
+  background: color-mix(in srgb, var(--wm-color-surface) 88%, transparent);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.gallery-item:hover .gallery-item-caption,
+.wm-gallery-item:hover .wm-gallery-item-caption {
+  opacity: 1;
+}
+
+/**
+ * .gallery-item-figure / .wm-gallery-item-figure
+ * Resume-style gallery tile with persistent figcaption below the media.
+ */
+.gallery-item-figure,
+.wm-gallery-item-figure {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.gallery-item-figure figcaption,
+.wm-gallery-item-figure figcaption {
+  font-size: 0.75rem;
+  color: var(--wm-color-text-muted);
+  padding: 0.4rem 0.6rem;
+  line-height: 1.4;
+  border-top: 1px solid var(--wm-color-border);
+  background: var(--wm-color-surface-solid);
+}
+
+/**
+ * .gallery-item-diagram / .wm-gallery-item-diagram
+ * Mermaid diagram tile used in resume project galleries.
+ */
+.gallery-item-diagram .mermaid,
+.wm-gallery-item-diagram .wm-mermaid {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--wm-color-surface-muted);
+}
+
+.gallery-item-diagram .mermaid svg,
+.wm-gallery-item-diagram .wm-mermaid svg {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+
+/**
+ * .gallery-placeholder / .wm-gallery-placeholder
+ * Design-first placeholder tile for when screenshots are not ready yet.
+ * Keep aspect ratio consistent with real images so layout does not shift later.
+ */
+.gallery-placeholder,
+.wm-gallery-placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 10;
+  padding: 0.9rem;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--wm-color-surface-strong) 88%, white) 0%,
+      var(--wm-color-surface-muted) 52%,
+      color-mix(in srgb, var(--wm-color-accent-soft) 24%, var(--wm-color-surface-muted)) 100%
+    );
+  color: var(--wm-color-text-muted);
+  text-align: center;
+}
+
+.gallery-placeholder::before,
+.wm-gallery-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 46%,
+    color-mix(in srgb, var(--wm-color-border) 64%, transparent) 46%,
+    color-mix(in srgb, var(--wm-color-border) 64%, transparent) 54%,
+    transparent 54%,
+    transparent 100%
+  );
+  background-size: 22px 22px;
+  opacity: 0.25;
+}
+
+.gallery-placeholder-content,
+.wm-gallery-placeholder-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.gallery-placeholder-title,
+.wm-gallery-placeholder-title {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--wm-color-text-secondary);
+  font-weight: 600;
+}
+
+.gallery-placeholder-meta,
+.wm-gallery-placeholder-meta {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--wm-color-text-muted);
+}
+
+/**
+ * .gallery-lightbox-overlay / .wm-gallery-lightbox-overlay
+ * Full-screen lightbox for gallery items. Toggle with .active.
+ */
+.gallery-lightbox-overlay,
+.wm-gallery-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, black 82%, transparent);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  padding: 1.25rem;
+}
+
+.gallery-lightbox-overlay.active,
+.wm-gallery-lightbox-overlay.wm-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.gallery-lightbox-close,
+.wm-gallery-lightbox-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.gallery-lightbox-close:hover,
+.wm-gallery-lightbox-close:hover {
+  opacity: 1;
+}
+
+.gallery-lightbox-img,
+.wm-gallery-lightbox-img {
+  max-width: min(92vw, 1200px);
+  max-height: 84vh;
+  border-radius: var(--wm-radius-base, 8px);
+  box-shadow: 0 8px 40px color-mix(in srgb, black 48%, transparent);
+  object-fit: contain;
+  border: 1px solid color-mix(in srgb, var(--wm-color-border) 72%, transparent);
+}
+
+.gallery-lightbox-nav,
+.wm-gallery-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: var(--wm-radius-pill);
+  border: 1px solid color-mix(in srgb, var(--wm-color-border) 72%, transparent);
+  background: color-mix(in srgb, var(--wm-color-surface-solid) 84%, transparent);
+  color: var(--wm-color-text);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.gallery-lightbox-nav:hover,
+.wm-gallery-lightbox-nav:hover {
+  background: color-mix(in srgb, var(--wm-color-surface-solid) 96%, transparent);
+}
+
+.gallery-lightbox-nav-prev,
+.wm-gallery-lightbox-nav-prev {
+  left: 1rem;
+}
+
+.gallery-lightbox-nav-next,
+.wm-gallery-lightbox-nav-next {
+  right: 1rem;
+}
+
+.gallery-lightbox-status,
+.wm-gallery-lightbox-status {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--wm-radius-pill);
+  background: color-mix(in srgb, black 42%, transparent);
+  color: #fff;
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+}
+
+/* ── Toggle Switch ────────────────────────────────────────────────────────────
+ * CSS-only pill toggle. Uses a visually-hidden checkbox + styled label track
+ * and thumb. Requires this markup structure:
+ *
+ *   <label class="wm-toggle">
+ *     <input type="checkbox" class="wm-toggle-input" />
+ *     <span class="wm-toggle-track">
+ *       <span class="wm-toggle-thumb"></span>
+ *     </span>
+ *     <span class="wm-toggle-label">Label text</span>
+ *   </label>
+ *
+ * Add a sibling <p class="wm-toggle-description"> below the label for
+ * supplementary help text.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.wm-toggle {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.wm-toggle-input {
+  /* Visually hidden but still accessible */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Track ───────────────────────────────────────────────────────────────── */
+
+.wm-toggle-track {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 1.25rem;
+  margin-top: 0.15rem; /* optical alignment with label text */
+  background: var(--wm-control-off);
+  border-radius: var(--wm-radius-pill);
+  border: 1px solid var(--wm-control-off);
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+/* ── Thumb ───────────────────────────────────────────────────────────────── */
+
+.wm-toggle-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0.125rem;
+  transform: translateY(-50%);
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--wm-control-thumb);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+  transition: left 0.18s ease;
+}
+
+/* ── Checked state ───────────────────────────────────────────────────────── */
+
+.wm-toggle-input:checked ~ .wm-toggle-track {
+  background: var(--wm-control-on);
+  border-color: var(--wm-control-on);
+}
+
+.wm-toggle-input:checked ~ .wm-toggle-track .wm-toggle-thumb {
+  left: calc(100% - 0.125rem - 0.875rem);
+}
+
+/* ── Focus ring ──────────────────────────────────────────────────────────── */
+
+.wm-toggle-input:focus-visible ~ .wm-toggle-track {
+  outline: 2px solid var(--wm-control-on);
+  outline-offset: 2px;
+}
+
+/* ── Label text ──────────────────────────────────────────────────────────── */
+
+.wm-toggle-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--wm-color-text);
+  line-height: 1.4;
+}
+
+/* ── Description text ────────────────────────────────────────────────────── */
+
+.wm-toggle-description {
+  margin: 0.2rem 0 0 calc(2.25rem + 0.65rem);
+  font-size: 0.8rem;
+  color: var(--wm-color-text-muted);
+  line-height: 1.5;
+}
+
+/* ── Disabled ────────────────────────────────────────────────────────────── */
+
+.wm-toggle:has(.wm-toggle-input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ── Wrapper for stacked toggle rows ────────────────────────────────────── */
+
+.wm-toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Slider ───────────────────────────────────────────────────────────────────
+ * Custom-styled range input. Apply .wm-slider to <input type="range">.
+ * Consistent cross-browser appearance via -webkit- and -moz- prefixes.
+ *
+ *   <input type="range" class="wm-slider" min="1" max="10" value="5" />
+ *
+ * Optional wrapper for label + value readout:
+ *
+ *   <div class="wm-slider-row">
+ *     <label class="wm-slider-label" for="mySlider">Speed</label>
+ *     <span class="wm-slider-value">5</span>
+ *   </div>
+ *   <input type="range" class="wm-slider" id="mySlider" min="1" max="10" value="5" />
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.wm-slider {
+  /* Reset */
+  appearance: none;
+  width: 100%;
+  height: 0.25rem;
+  padding: 0;
+  margin: 0.5rem 0;
+  background: var(--wm-control-off);
+  border: none;
+  border-radius: var(--wm-radius-pill);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.wm-slider:hover {
+  background: color-mix(in srgb, var(--wm-control-off) 82%, white);
+}
+
+/* ── Filled progress track (WebKit) ──────────────────────────────────────── */
+
+.wm-slider::-webkit-slider-runnable-track {
+  height: 0.25rem;
+  border-radius: var(--wm-radius-pill);
+  background: linear-gradient(
+    to right,
+    var(--wm-control-on) 0%,
+    var(--wm-control-on) var(--wm-slider-progress, 50%),
+    var(--wm-control-off) var(--wm-slider-progress, 50%)
+  );
+}
+
+/* ── Thumb (WebKit) ──────────────────────────────────────────────────────── */
+
+.wm-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--wm-control-thumb);
+  border: 2px solid var(--wm-control-on);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+  margin-top: -0.375rem; /* center on track */
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  cursor: pointer;
+}
+
+.wm-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 28%);
+}
+
+/* ── Track (Firefox) ─────────────────────────────────────────────────────── */
+
+.wm-slider::-moz-range-track {
+  height: 0.25rem;
+  border-radius: var(--wm-radius-pill);
+  background: var(--wm-control-off);
+}
+
+.wm-slider::-moz-range-progress {
+  height: 0.25rem;
+  border-radius: var(--wm-radius-pill);
+  background: var(--wm-control-on);
+}
+
+/* ── Thumb (Firefox) ─────────────────────────────────────────────────────── */
+
+.wm-slider::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--wm-control-thumb);
+  border: 2px solid var(--wm-control-on);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.wm-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* ── Focus ring ──────────────────────────────────────────────────────────── */
+
+.wm-slider:focus-visible {
+  outline: 2px solid var(--wm-control-on);
+  outline-offset: 3px;
+}
+
+/* ── Disabled ────────────────────────────────────────────────────────────── */
+
+.wm-slider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wm-slider:disabled::-webkit-slider-thumb,
+.wm-slider:disabled::-moz-range-thumb {
+  cursor: not-allowed;
+}
+
+/* ── Label row wrapper ───────────────────────────────────────────────────── */
+
+.wm-slider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.wm-slider-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--wm-color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.wm-slider-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--wm-control-on);
+  min-width: 1.5rem;
+  text-align: right;
+}
+
+/* ── Tick marks below slider ─────────────────────────────────────────────── */
+
+.wm-slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+  padding: 0 0.375rem; /* align with thumb edges */
+}
+
+.wm-slider-tick {
+  font-size: 0.68rem;
+  color: var(--wm-color-text-faint);
+}
+
+/* ── Toggle Group ─────────────────────────────────────────────────────────────
+ * Exclusive button-group / segmented control. Semantically for picking one
+ * value from a small set (not navigation — use .tab-bar for page switching).
+ *
+ * Horizontal (default):
+ *   <div class="wm-toggle-group" role="group" aria-label="Color palette">
+ *     <button class="wm-toggle-group-btn" type="button">Matrix</button>
+ *     <button class="wm-toggle-group-btn wm-toggle-group-btn-active" type="button">Classic</button>
+ *     <button class="wm-toggle-group-btn" type="button">Ember</button>
+ *   </div>
+ *
+ * Vertical (add .wm-toggle-group-vertical):
+ *   <div class="wm-toggle-group wm-toggle-group-vertical" role="group">
+ *     …
+ *   </div>
+ *
+ * Full-width (add .wm-toggle-group-full):
+ *   <div class="wm-toggle-group wm-toggle-group-full" role="group">
+ *     …
+ *   </div>
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.wm-toggle-group {
+  display: inline-flex;
+  flex-direction: row;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-xs);
+  overflow: hidden;
+}
+
+/* ── Vertical modifier ───────────────────────────────────────────────────── */
+
+.wm-toggle-group-vertical {
+  flex-direction: column;
+}
+
+/* ── Full-width modifier ─────────────────────────────────────────────────── */
+
+.wm-toggle-group-full {
+  display: flex;
+  width: 100%;
+}
+
+/* ── Button ──────────────────────────────────────────────────────────────── */
+
+.wm-toggle-group-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border: none;
+  border-right: 1px solid var(--wm-color-border);
+  background: var(--wm-color-surface);
+  color: var(--wm-color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+  white-space: nowrap;
+}
+
+.wm-toggle-group-btn:last-child {
+  border-right: none;
+}
+
+.wm-toggle-group-btn:hover {
+  background: var(--wm-color-surface-strong);
+  color: var(--wm-color-text);
+}
+
+/* ── Disabled ────────────────────────────────────────────────────────────── */
+
+.wm-toggle-group-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Full-width modifier button override ─────────────────────────────────── */
+
+.wm-toggle-group-full .wm-toggle-group-btn {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+/* In vertical layout replace right border with bottom border */
+.wm-toggle-group-vertical .wm-toggle-group-btn {
+  border-right: none;
+  border-bottom: 1px solid var(--wm-color-border);
+}
+
+.wm-toggle-group-vertical .wm-toggle-group-btn:last-child {
+  border-bottom: none;
+}
+
+/* ── Active / selected state ─────────────────────────────────────────────── */
+
+.wm-toggle-group-btn-active,
+.wm-toggle-group-btn[aria-pressed="true"],
+.wm-toggle-group-btn[data-active="true"] {
+  background: var(--wm-color-accent-soft);
+  color: var(--wm-color-accent);
+  border-right-color: var(--wm-color-accent-border);
+}
+
+.wm-toggle-group-btn-active:hover,
+.wm-toggle-group-btn[aria-pressed="true"]:hover {
+  background: color-mix(in srgb, var(--wm-color-accent-soft) 75%, var(--wm-color-accent-border));
+}
+
+/* Vertical active border */
+.wm-toggle-group-vertical .wm-toggle-group-btn-active,
+.wm-toggle-group-vertical .wm-toggle-group-btn[aria-pressed="true"] {
+  border-bottom-color: var(--wm-color-accent-border);
+}
+
+/* ── Color swatch variant ────────────────────────────────────────────────── */
+
+.wm-toggle-group-swatch {
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--wm-radius-xs);
+  border: 1px solid rgb(0 0 0 / 15%);
+  flex-shrink: 0;
+}
+
+/* ── Toast Notification ───────────────────────────────────────────────────────
+ * Fixed bottom-center notification bar. Manage show/hide with JS by toggling
+ * .wm-toast-visible. Use tonal modifiers for semantic intent.
+ *
+ * Markup:
+ *   <div class="wm-toast wm-toast-success wm-toast-visible" role="status" aria-live="polite">
+ *     Pattern loaded successfully.
+ *     <button class="wm-toast-dismiss" type="button" aria-label="Dismiss">&#x2715;</button>
+ *   </div>
+ *
+ * Show: add .wm-toast-visible
+ * Hide: remove .wm-toast-visible (or add .wm-toast-hiding for fade-out animation)
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.wm-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(1rem);
+  z-index: 1100;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem 0.65rem 1.1rem;
+  min-width: 240px;
+  max-width: min(480px, calc(100vw - 2rem));
+  background: var(--wm-color-surface-solid);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-sm);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 18%);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--wm-color-text-secondary);
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ── Visible state ───────────────────────────────────────────────────────── */
+
+.wm-toast-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* ── Hiding (fade out before removal) ───────────────────────────────────── */
+
+.wm-toast-hiding {
+  opacity: 0;
+  transform: translateX(-50%) translateY(0.5rem);
+  pointer-events: none;
+}
+
+/* ── Dismiss button ──────────────────────────────────────────────────────── */
+
+.wm-toast-dismiss {
+  background: none;
+  border: none;
+  padding: 0.2rem 0.35rem;
+  margin-left: auto;
+  border-radius: var(--wm-radius-xs);
+  color: var(--wm-color-text-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.1s ease, color 0.1s ease;
+
+  /* override base.css width:100% on button */
+  width: auto;
+}
+
+.wm-toast-dismiss:hover {
+  background: var(--wm-color-surface-strong);
+  color: var(--wm-color-text);
+}
+
+/* ── Tonal variants ──────────────────────────────────────────────────────── */
+
+.wm-toast-success {
+  background: var(--wm-color-success-soft);
+  border-color: var(--wm-color-success-border);
+  color: var(--wm-color-success);
+}
+
+.wm-toast-danger {
+  background: var(--wm-color-danger-soft);
+  border-color: var(--wm-color-danger-border);
+  color: var(--wm-color-danger);
+}
+
+.wm-toast-warning {
+  background: var(--wm-color-warning-soft);
+  border-color: var(--wm-color-warning-border);
+  color: var(--wm-color-warning);
+}
+
+.wm-toast-info {
+  background: var(--wm-color-accent-soft);
+  border-color: var(--wm-color-accent-border);
+  color: var(--wm-color-accent);
+}
+
+/* Dismiss button inherits tonal color; override to stay readable */
+.wm-toast-success .wm-toast-dismiss,
+.wm-toast-danger .wm-toast-dismiss,
+.wm-toast-warning .wm-toast-dismiss,
+.wm-toast-info .wm-toast-dismiss {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.wm-toast-success .wm-toast-dismiss:hover,
+.wm-toast-danger .wm-toast-dismiss:hover,
+.wm-toast-warning .wm-toast-dismiss:hover,
+.wm-toast-info .wm-toast-dismiss:hover {
+  opacity: 1;
+  background: rgb(0 0 0 / 6%);
+}
+
+/*
+  Code Block — syntax-highlighted samples with a header bar and copy button.
+
+  Structure:
+    <div class="code-sample" data-lang="html">
+      <button class="code-copy-btn" type="button">Copy</button>
+      <pre class="code-block"><code class="language-html">…</code></pre>
+    </div>
+
+  The header bar (language label) is rendered via ::before on .code-sample using
+  the data-lang attribute. The copy button is absolutely positioned in that bar.
+*/
+
+.code-sample {
+  position: relative;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-xs);
+  overflow: hidden;
+}
+
+/* Header bar — shows the language label */
+.code-sample::before {
+  content: attr(data-lang);
+  display: block;
+  padding: 0 0.85rem;
+  line-height: 2rem;
+  min-height: 2rem;
+  background: var(--wm-color-surface-strong);
+  border-bottom: 1px solid var(--wm-color-border);
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace;
+  letter-spacing: 0.06em;
+  color: var(--wm-color-text-muted);
+  text-transform: lowercase;
+}
+
+/* Copy button — top-right of the header bar */
+.code-copy-btn {
+  all: unset;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2rem;
+  z-index: 1;
+  padding: 0 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 500;
+  font-family: var(--wm-font-sans, 'Inter', sans-serif);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--wm-color-text-muted);
+  border: none;
+  border-left: 1px solid var(--wm-color-border);
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+  line-height: 2rem;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.code-copy-btn:hover,
+.code-copy-btn:focus {
+  background: var(--wm-color-surface-muted);
+  color: var(--wm-color-text);
+}
+
+/* Code block — the <pre> inside .code-sample */
+pre.code-block {
+  background: var(--wm-color-bg);
+  border: none;
+  border-radius: 0;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace;
+  color: var(--wm-color-text-secondary);
+  margin: 0;
+  tab-size: 2;
+}
+
+.code-block code {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  padding: 0;
+}
+
+/* =========================================================
   jsonresume-theme-wintermuted
    Design language: OpenAI — clean, editorial, light/dark
    ========================================================= */
