@@ -4,11 +4,17 @@ on:
   push:
     branches:
       - main
+    tags-ignore:
+      - "**"
   workflow_dispatch:
 
 permissions:
   contents: write
   id-token: write
+
+concurrency:
+  group: publish-release
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -30,37 +36,93 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Resolve release version
+      - name: Compute next patch version
         id: version
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          LATEST=$(git tag --list 'v*' --sort=-version:refname | head -n 1)
+          if [ -z "$LATEST" ]; then
+            NEXT="v0.1.0"
+          else
+            VERSION="${LATEST#v}"
+            MAJOR=$(echo "$VERSION" | cut -d. -f1)
+            MINOR=$(echo "$VERSION" | cut -d. -f2)
+            PATCH=$(echo "$VERSION" | cut -d. -f3)
+            NEXT="v${MAJOR}.${MINOR}.$((PATCH + 1))"
+          fi
+          echo "tag=$NEXT" >> "$GITHUB_OUTPUT"
+          echo "Next release: $NEXT"
 
-      - name: Check release state
-        id: release_state
+      - name: Update package version files
+        id: version_files
         run: |
-          TAG="v${{ steps.version.outputs.version }}"
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          VERSION="${{ steps.version.outputs.tag }}"
+          TARGET_VERSION="${VERSION#v}"
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          LOCK_VERSION=""
+          echo "committed=false" >> "$GITHUB_OUTPUT"
 
-          if git ls-remote --tags origin "refs/tags/${TAG}" | grep -q .; then
+          if [ -f package-lock.json ]; then
+            LOCK_VERSION=$(node -p "require('./package-lock.json').version")
+          fi
+
+          if [ "$CURRENT_VERSION" = "$TARGET_VERSION" ] && { [ -z "$LOCK_VERSION" ] || [ "$LOCK_VERSION" = "$TARGET_VERSION" ]; }; then
+            echo "package.json (and package-lock.json, if present) is already at $CURRENT_VERSION; skipping version bump."
+            exit 0
+          fi
+
+          npm version "$TARGET_VERSION" --no-git-tag-version --allow-same-version
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          if [ -f package-lock.json ]; then
+            git add package-lock.json
+          fi
+
+          if git diff --cached --quiet; then
+            echo "No version changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: bump version to ${VERSION#v} [skip ci]"
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Verify package version has not been published
+        id: preflight
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+
+          if npm view "$PKG_NAME@$PKG_VERSION" version --registry=https://registry.npmjs.org > /dev/null 2>&1; then
+            echo "$PKG_NAME@$PKG_VERSION is already published."
             echo "publish=false" >> "$GITHUB_OUTPUT"
-            echo "release=false" >> "$GITHUB_OUTPUT"
-          elif npm view "${PACKAGE_NAME}@${{ steps.version.outputs.version }}" version >/dev/null 2>&1; then
-            echo "publish=false" >> "$GITHUB_OUTPUT"
-            echo "release=true" >> "$GITHUB_OUTPUT"
           else
             echo "publish=true" >> "$GITHUB_OUTPUT"
-            echo "release=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Publish to npm
-        if: steps.release_state.outputs.publish == 'true'
+        if: steps.preflight.outputs.publish == 'true'
         run: npm publish --access public --provenance
 
+      - name: Push version commit to main
+        if: steps.version_files.outputs.committed == 'true'
+        run: git push origin main
+
+      - name: Create and push tag
+        run: |
+          git tag "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+
       - name: Create GitHub release
-        if: steps.release_state.outputs.release == 'true'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: v${{ steps.version.outputs.version }}
-          generate_release_notes: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "Release $TAG already exists; skipping."
+            exit 0
+          fi
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --generate-notes \
+            --latest
