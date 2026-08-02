@@ -2,6 +2,18 @@
 
 Open-source JSON Resume theme extracted from the private CV repository.
 
+## Preview
+
+These screenshots use the bundled Alex Winter sample resume rendered with this theme.
+
+### Summary And Experience
+
+![Alex Winter summary and experience preview](examples/screenshots/alex-winter-summary.png)
+
+### Projects
+
+![Alex Winter projects preview](examples/screenshots/alex-winter-projects.png)
+
 ## Install
 
 ```bash
