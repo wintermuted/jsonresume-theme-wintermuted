@@ -899,10 +899,15 @@ ul.role-projects-list li a.project-ref:hover {
   position: static;
 }
 
+.controls-menu-btn {
+  display: none;
+}
+
 .print-btn,
 .view-toggle,
 .nav-pos-toggle,
-.layout-mode-toggle {
+.layout-mode-toggle,
+.controls-menu-btn {
   background: var(--color-toggle-bg);
   border: 1px solid var(--color-border);
   border-radius: 100px;
@@ -932,7 +937,8 @@ ul.role-projects-list li a.project-ref:hover {
 .print-btn:hover,
 .view-toggle:hover,
 .nav-pos-toggle:hover,
-.layout-mode-toggle:hover {
+.layout-mode-toggle:hover,
+.controls-menu-btn:hover {
   background: var(--color-toggle-hover);
   color: var(--color-text);
 }
@@ -1314,7 +1320,8 @@ ul.role-projects-list li a.project-ref:hover {
     text-decoration: none;
   }
 
-  .controls {
+  .controls,
+  .controls-menu-btn {
     display: none;
   }
 
@@ -1468,24 +1475,53 @@ ul.role-projects-list li a.project-ref:hover {
     --resume-body-padding: 0 1rem 1.5rem;
   }
 
-  .header-contact {
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-
   .header-top {
-    grid-template-columns: 1fr;
-    gap: 0.65rem;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .header-name,
-  .controls {
+  .header-name {
     grid-column: 1;
-    justify-self: center;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  .controls-menu-btn {
+    display: inline-flex;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: center;
+    font-size: 1rem;
+    padding: 0.3rem 0.55rem;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
   .controls {
-    justify-content: center;
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: stretch;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .controls.is-open {
+    display: flex;
+  }
+
+  .header-contact {
+    gap: 0.15rem 0.65rem;
+  }
+
+  .header-contact span {
+    white-space: normal;
   }
 
   .role-header {

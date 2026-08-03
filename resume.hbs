@@ -26,7 +26,7 @@
           <h1>{{ name }}</h1>
           <p class="label">{{ label }}</p>
         </div>
-        <div class="controls">
+        <div class="controls" id="controls-panel">
           <button class="print-btn" aria-label="Print resume" type="button" onclick="window.print()">&#9113; Print</button>
           <button class="view-toggle" aria-label="Toggle view" type="button">
             <span class="control-icon" aria-hidden="true">&#9776;</span>
@@ -42,6 +42,7 @@
             <span class="icon-sun">&#9788;</span>
           </button>
         </div>
+        <button class="controls-menu-btn" aria-label="Toggle controls" aria-expanded="false" aria-controls="controls-panel" type="button">&#9881;</button>
       </div>
       <div class="header-contact">
         {{#if email}}<span><a href="mailto:{{ email }}">{{ email }}</a></span>{{/if}}
@@ -86,6 +87,28 @@
     <script>
       (function () {
         var html = document.documentElement;
+
+        /* --- Controls Menu (mobile) --- */
+        (function () {
+          var menuBtn = document.querySelector('.controls-menu-btn');
+          var panel = document.getElementById('controls-panel');
+          if (!menuBtn || !panel) return;
+
+          menuBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var isOpen = panel.classList.toggle('is-open');
+            menuBtn.setAttribute('aria-expanded', String(isOpen));
+          });
+
+          document.addEventListener('click', function (e) {
+            if (panel.classList.contains('is-open') &&
+                !panel.contains(e.target) &&
+                !menuBtn.contains(e.target)) {
+              panel.classList.remove('is-open');
+              menuBtn.setAttribute('aria-expanded', 'false');
+            }
+          });
+        })();
 
         /* --- Dark / Light theme --- */
         var themeBtn = document.querySelector('.theme-toggle');
