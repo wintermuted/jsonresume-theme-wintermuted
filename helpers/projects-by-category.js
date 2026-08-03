@@ -6,9 +6,12 @@ export function projectsByCategory(projects, category) {
   var normalizedCategory = String(category).toLowerCase();
 
   return projects.filter(function (project) {
-    var explicitCategory = project && project.projectCategory
-      ? String(project.projectCategory).toLowerCase()
-      : null;
+    var explicitCategory = null;
+    if (project && project.projectCategory) {
+      explicitCategory = String(project.projectCategory).toLowerCase();
+    } else if (project && project.category) {
+      explicitCategory = String(project.category).toLowerCase();
+    }
 
     if (explicitCategory) {
       return explicitCategory === normalizedCategory;

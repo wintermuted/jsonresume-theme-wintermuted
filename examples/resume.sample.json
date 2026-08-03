@@ -27,25 +27,97 @@
   "work": [
     {
       "name": "Northwind Labs",
+      "position": "Software Engineer II",
+      "startDate": "2020-01-01",
+      "endDate": "2021-12-31",
+      "_shortSummary": "Scaled analytics workflows and prepared the platform migration path.",
+      "summary": "Owned reliability improvements in data-heavy dashboards while partnering with product and design on a modernization roadmap.",
+      "highlights": [
+        "Delivered a query optimizer that reduced expensive report execution by 33% during peak usage windows.",
+        "Established feature-flag release playbooks that lowered rollback incidents in the analytics console.",
+        "Partnered with platform teams to define migration milestones later used by the Ops Pulse Console and Insights Canvas projects."
+      ],
+      "keywords": [
+        "TypeScript",
+        "React",
+        "Feature Flags",
+        "Performance Tuning"
+      ]
+    },
+    {
+      "name": "Northwind Labs",
       "position": "Senior Software Engineer",
       "startDate": "2022-01-01",
       "endDate": "",
-      "summary": "Led UI platform modernization for monitoring and reporting products.",
+      "_shortSummary": "Led UI platform modernization for monitoring and reporting products.",
+      "summary": "Directed frontend architecture, delivery practices, and cross-team component standards used by multiple product lines.",
       "highlights": [
         "Reduced page load time by 42% through route-based code splitting and cache strategy updates.",
         "Designed shared component primitives consumed across 4 internal applications.",
-        "Introduced CI preview workflows for pull requests to improve review quality."
+        "Introduced CI preview workflows for pull requests to improve review quality.",
+        "Mentored 5 engineers on design-system migration and front-end observability instrumentation."
+      ],
+      "keywords": [
+        "Design Systems",
+        "GitHub Actions",
+        "Web Performance",
+        "Observability",
+        "Technical Leadership"
+      ]
+    },
+    {
+      "name": "Northwind Labs",
+      "position": "Staff Software Engineer",
+      "startDate": "2024-06-01",
+      "endDate": "",
+      "_shortSummary": "Expanded platform ownership across developer experience and release governance.",
+      "summary": "Set architecture direction for shared UI infrastructure, focusing on accessibility, telemetry, and delivery velocity across product squads.",
+      "highlights": [
+        "Defined engineering standards for component contracts, analytics events, and release scorecards.",
+        "Launched an internal migration toolkit used by 3 squads to adopt the new platform baseline in under 2 sprints.",
+        "Created architecture review templates that improved technical proposal quality and reduced rework."
+      ],
+      "keywords": [
+        "Architecture",
+        "Accessibility",
+        "Developer Experience",
+        "Program Leadership"
+      ]
+    },
+    {
+      "name": "Pinecone Systems",
+      "position": "Associate Software Engineer",
+      "startDate": "2018-06-01",
+      "endDate": "2019-12-31",
+      "_shortSummary": "Built core charting and reporting capabilities for customer analytics.",
+      "summary": "Developed foundational frontend modules and collaborated with backend teams on consistent reporting APIs.",
+      "highlights": [
+        "Built first-generation visualization modules used by 2,000+ weekly active users.",
+        "Authored reusable test helpers that reduced flaky UI test failures by 24%."
+      ],
+      "keywords": [
+        "JavaScript",
+        "Data Visualization",
+        "Testing"
       ]
     },
     {
       "name": "Pinecone Systems",
       "position": "Software Engineer",
-      "startDate": "2018-06-01",
+      "startDate": "2020-01-01",
       "endDate": "2021-12-31",
-      "summary": "Implemented customer-facing analytics workflows and internal tooling.",
+      "_shortSummary": "Implemented customer-facing analytics workflows and internal tooling.",
+      "summary": "Owned feature delivery for analytics dashboards and strengthened code quality, release safety, and team onboarding docs.",
       "highlights": [
         "Built data visualization modules used by 2,000+ weekly active users.",
-        "Improved automated test coverage from 38% to 81% on core UI modules."
+        "Improved automated test coverage from 38% to 81% on core UI modules.",
+        "Co-led the migration from ad hoc scripts to declarative build pipelines with reusable templates."
+      ],
+      "keywords": [
+        "Node.js",
+        "CI/CD",
+        "Documentation",
+        "Mentorship"
       ]
     }
   ],
@@ -71,11 +143,196 @@
   "projects": [
     {
       "name": "Theme Token Library",
+      "category": "work",
+      "entity": "Northwind Labs",
+      "startDate": "2022-03-01",
+      "endDate": "",
       "description": "Reusable design token package and docs showcase for internal products.",
       "url": "https://github.com/example/theme-token-library",
       "highlights": [
         "Shipped preview deployments for pull requests.",
-        "Documented component usage with sample data scenarios."
+        "Documented component usage with sample data scenarios.",
+        "Reduced UI inconsistencies across product teams by formalizing token usage rules."
+      ],
+      "keywords": [
+        "CSS Variables",
+        "Design Tokens",
+        "Documentation",
+        "Accessibility"
+      ],
+      "images": [
+        {
+          "src": "jsonresume-theme-wintermuted/examples/screenshots/filler-blue-hatch.png",
+          "alt": "Token library dashboard filler screenshot",
+          "caption": "Filler screenshot: token explorer and usage guidance"
+        },
+        {
+          "src": "jsonresume-theme-wintermuted/examples/screenshots/filler-violet-hatch.png",
+          "alt": "Component adoption filler screenshot",
+          "caption": "Filler screenshot: component adoption status"
+        }
+      ],
+      "diagrams": [
+        {
+          "title": "Token Release Flow",
+          "definition": "flowchart LR\n  Design[Design specs] --> Tokens[Token package]\n  Tokens --> Docs[Showcase docs]\n  Tokens --> Apps[Product apps]\n  Docs --> Adoption[Team adoption]"
+        }
+      ]
+    },
+    {
+      "name": "Ops Pulse Console",
+      "category": "work",
+      "entity": "Northwind Labs",
+      "startDate": "2024-01-01",
+      "endDate": "",
+      "description": "Operational health and incident triage console for product and support teams.",
+      "url": "https://github.com/example/ops-pulse-console",
+      "highlights": [
+        "Unified latency, error, and deployment telemetry into one operational view.",
+        "Introduced alert drill-down pathways that cut triage time by 35%."
+      ],
+      "keywords": [
+        "Observability",
+        "Incident Response",
+        "React",
+        "Telemetry"
+      ],
+      "images": [
+        {
+          "src": "jsonresume-theme-wintermuted/examples/screenshots/filler-cyan-hatch.png",
+          "alt": "Ops dashboard filler screenshot",
+          "caption": "Filler screenshot: operations overview"
+        }
+      ],
+      "diagrams": [
+        {
+          "title": "Incident Triage Sequence",
+          "definition": "sequenceDiagram\n  participant Alert as Alerting\n  participant Console as Ops Pulse\n  participant Engineer as On-call Engineer\n  Alert->>Console: Publish incident signal\n  Console->>Engineer: Route prioritized alert\n  Engineer->>Console: Annotate root cause and mitigation"
+        }
+      ]
+    },
+    {
+      "name": "Insights Canvas",
+      "category": "work",
+      "entity": "Northwind Labs",
+      "startDate": "2020-07-01",
+      "endDate": "2023-06-30",
+      "description": "Composable analytics workspace for assembling saved queries, charts, and commentary.",
+      "url": "https://github.com/example/insights-canvas",
+      "highlights": [
+        "Enabled drag-and-drop report composition with reusable dashboard sections.",
+        "Added collaborative annotations to improve cross-functional decision velocity."
+      ],
+      "keywords": [
+        "Product Analytics",
+        "UX Architecture",
+        "Collaboration"
+      ],
+      "images": [
+        {
+          "src": "jsonresume-theme-wintermuted/examples/screenshots/filler-emerald-hatch.png",
+          "alt": "Insights canvas filler screenshot",
+          "caption": "Filler screenshot: reusable analytics composition"
+        }
+      ],
+      "diagrams": [
+        {
+          "title": "Report Composition Model",
+          "definition": "flowchart TD\n  Data[Data sources] --> Query[Saved query]\n  Query --> Widget[Chart widget]\n  Widget --> Board[Canvas board]\n  Board --> Share[Shared decision packet]"
+        }
+      ]
+    },
+    {
+      "name": "Analytics Narrative Studio",
+      "category": "work",
+      "entity": "Pinecone Systems",
+      "startDate": "2019-03-01",
+      "endDate": "2021-09-30",
+      "description": "Guided storytelling layer for converting analytics output into executive-friendly narratives.",
+      "url": "https://github.com/example/analytics-narrative-studio",
+      "highlights": [
+        "Combined chart snapshots and templated narrative blocks for quarterly business reviews.",
+        "Increased stakeholder self-service by packaging reusable report templates."
+      ],
+      "keywords": [
+        "Data Storytelling",
+        "Templates",
+        "Visualization"
+      ],
+      "images": [
+        {
+          "src": "jsonresume-theme-wintermuted/examples/screenshots/filler-amber-hatch.png",
+          "alt": "Narrative studio filler screenshot",
+          "caption": "Filler screenshot: analytics narrative composition"
+        }
+      ],
+      "diagrams": [
+        {
+          "title": "Narrative Assembly",
+          "definition": "graph LR\n  Metrics[Metrics feed] --> Charting[Chart blocks]\n  Charting --> Story[Narrative templates]\n  Story --> Review[Executive review packet]"
+        }
+      ]
+    },
+    {
+      "name": "Build Pipeline Blueprint",
+      "category": "work",
+      "entity": "Pinecone Systems",
+      "startDate": "2020-02-01",
+      "endDate": "2021-12-31",
+      "description": "Reusable CI workflow template library for frontend services and shared modules.",
+      "url": "https://github.com/example/build-pipeline-blueprint",
+      "highlights": [
+        "Standardized CI steps for linting, test sharding, and preview deployments.",
+        "Improved release confidence with pipeline quality gates and artifact checksums."
+      ],
+      "keywords": [
+        "CI/CD",
+        "GitHub Actions",
+        "Release Engineering"
+      ],
+      "images": [
+        {
+          "src": "jsonresume-theme-wintermuted/examples/screenshots/filler-red-hatch.png",
+          "alt": "Pipeline blueprint filler screenshot",
+          "caption": "Filler screenshot: CI template catalog"
+        }
+      ],
+      "diagrams": [
+        {
+          "title": "Pipeline Stage Map",
+          "definition": "flowchart LR\n  Commit[Commit] --> Lint[Lint + Typecheck]\n  Lint --> Test[Test matrix]\n  Test --> Preview[Preview deploy]\n  Preview --> Promote[Promotion gate]"
+        }
+      ]
+    },
+    {
+      "name": "jsonresume-theme-wintermuted",
+      "category": "open-source",
+      "startDate": "2025-01-01",
+      "endDate": "",
+      "description": "An opinionated JSON Resume theme with role-to-project linking, expandable details, and gallery support.",
+      "url": "https://github.com/wintermuted/jsonresume-theme-wintermuted",
+      "highlights": [
+        "Implemented project-to-position cross-links and Mermaid diagram rendering.",
+        "Added preview workflows and sample data packs for realistic theme validation."
+      ],
+      "keywords": [
+        "Handlebars",
+        "JSON Resume",
+        "Theming",
+        "Documentation"
+      ],
+      "images": [
+        {
+          "src": "jsonresume-theme-wintermuted/examples/screenshots/filler-violet-hatch.png",
+          "alt": "Open source theme filler screenshot",
+          "caption": "Filler screenshot: open source theme preview"
+        }
+      ],
+      "diagrams": [
+        {
+          "title": "Theme Rendering Pipeline",
+          "definition": "flowchart TD\n  ResumeJSON[resume.sample.json] --> Renderer[Theme renderer]\n  Renderer --> HTML[preview.html]\n  HTML --> Browser[Interactive preview]"
+        }
       ]
     }
   ]
