@@ -102,6 +102,8 @@ jobs:
 
       - name: Publish to npm
         if: steps.preflight.outputs.publish == 'true'
+        env:
+          NODE_AUTH_TOKEN: ""
         run: npm publish --access public --provenance
 
       - name: Push version commit to main
