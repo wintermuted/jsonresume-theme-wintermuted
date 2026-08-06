@@ -40,7 +40,7 @@
       <div class="project-gallery">
         {{#each images}}
         <figure class="project-screenshot">
-          <img src="../../{{ src }}" alt="{{ alt }}" loading="lazy" />
+          <img src="{{assetSrc src}}" alt="{{ alt }}" loading="lazy" />
           {{#if caption}}<figcaption>{{ caption }}</figcaption>{{/if}}
         </figure>
         {{/each}}
@@ -110,7 +110,7 @@
       <div class="project-gallery">
         {{#each images}}
         <figure class="project-screenshot">
-          <img src="../../{{ src }}" alt="{{ alt }}" loading="lazy" />
+          <img src="{{assetSrc src}}" alt="{{ alt }}" loading="lazy" />
           {{#if caption}}<figcaption>{{ caption }}</figcaption>{{/if}}
         </figure>
         {{/each}}
