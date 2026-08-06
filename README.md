@@ -34,6 +34,8 @@ npm install ../jsonresume-theme-wintermuted
 resumed render resume.json -t jsonresume-theme-wintermuted -o resume.html
 ```
 
+Project screenshots declared in `resume.json` are inlined automatically when `src` points to a local image file. Relative paths are resolved from the directory where you run `resumed render`, which keeps exported HTML self-contained for local viewing, GitHub Pages, and other static hosts.
+
 ## Scripts
 
 The package includes these local preview scripts:
