@@ -4601,6 +4601,11 @@ ul.role-projects-list li a.project-ref:hover {
           var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
           html.setAttribute('data-theme', next);
           localStorage.setItem('theme', next);
+          if (typeof window.refreshMermaidTheme === 'function') {
+            window.refreshMermaidTheme();
+          } else {
+            window.__mermaidThemePending = true;
+          }
         });
 
         /* --- Detailed / Summary view --- */
@@ -4633,6 +4638,13 @@ ul.role-projects-list li a.project-ref:hover {
               el.classList.remove('expanded');
               el.firstChild.textContent = 'Show details';
             });
+          }
+
+          // Newly revealed diagrams must be rendered when switching views.
+          if (typeof window.renderMermaidIn === 'function') {
+            window.renderMermaidIn(document);
+          } else {
+            window.__mermaidRenderPending = true;
           }
         });
 
@@ -5496,32 +5508,77 @@ ul.role-projects-list li a.project-ref:hover {
     </script>
     <script type="module">
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
-        flowchart: { useMaxWidth: true, htmlLabels: true },
-        sequence: { useMaxWidth: true }
-      });
 
-      window.renderMermaidIn = async function (root) {
-        var scope = root || document;
-        var nodes = Array.from(scope.querySelectorAll('.mermaid')).filter(function (el) {
-          return el.offsetParent !== null && !el.dataset.mermaidRendered;
+      function mermaidTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default';
+      }
+
+      let currentMermaidTheme = null;
+
+      function initMermaid(theme) {
+        currentMermaidTheme = theme;
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: theme,
+          flowchart: { useMaxWidth: true, htmlLabels: true },
+          sequence: { useMaxWidth: true }
         });
+      }
 
-        if (!nodes.length) return;
+      initMermaid(mermaidTheme());
 
+      // Keep the original diagram source so nodes can be re-rendered (e.g. on theme change).
+      const mermaidSources = new WeakMap();
+      let mermaidSeq = 0;
+
+      async function renderNode(el) {
+        let source = mermaidSources.get(el);
+        if (source === undefined) {
+          source = el.textContent;
+          mermaidSources.set(el, source);
+        }
         try {
-          await mermaid.run({ nodes: nodes });
-          nodes.forEach(function (el) {
-            el.dataset.mermaidRendered = 'true';
-          });
+          // mermaid.render() draws in a detached container, so nodes inside
+          // collapsed/hidden blocks still render at the correct size.
+          const { svg, bindFunctions } = await mermaid.render('mermaid-svg-' + ++mermaidSeq, source);
+          el.innerHTML = svg;
+          if (bindFunctions) bindFunctions(el);
+          el.removeAttribute('data-processed');
+          el.dataset.mermaidRendered = 'true';
         } catch (err) {
           console.error('Mermaid render error:', err);
+          el.textContent = source;
+          delete el.dataset.mermaidRendered;
         }
+      }
+
+      window.renderMermaidIn = async function (root, force) {
+        const scope = root && root.querySelectorAll ? root : document;
+        const nodes = Array.from(scope.querySelectorAll('.mermaid')).filter(function (el) {
+          return force || !el.dataset.mermaidRendered;
+        });
+        // Render one at a time so a single bad diagram cannot abort the rest.
+        for (const el of nodes) await renderNode(el);
       };
 
-      window.renderMermaidIn(document);
+      window.refreshMermaidTheme = async function () {
+        const next = mermaidTheme();
+        if (next === currentMermaidTheme) return;
+        initMermaid(next);
+        await window.renderMermaidIn(document, true);
+      };
+
+      await window.renderMermaidIn(document);
+
+      // A toggle clicked before this module finished loading sets a pending flag.
+      if (window.__mermaidRenderPending) {
+        window.__mermaidRenderPending = false;
+        window.renderMermaidIn(document);
+      }
+      if (window.__mermaidThemePending) {
+        window.__mermaidThemePending = false;
+        window.refreshMermaidTheme();
+      }
     </script>
   </body>
 </html>
